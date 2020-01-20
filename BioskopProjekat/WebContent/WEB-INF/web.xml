@@ -52,4 +52,24 @@
   <listener>
     <listener-class>servleti.InitListener</listener-class>
   </listener>
+  <servlet>
+    <description></description>
+    <display-name>RegistracijaServlet</display-name>
+    <servlet-name>RegistracijaServlet</servlet-name>
+    <servlet-class>servleti.RegistracijaServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RegistracijaServlet</servlet-name>
+    <url-pattern>/RegistracijaServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>KorisniciServlet</display-name>
+    <servlet-name>KorisniciServlet</servlet-name>
+    <servlet-class>servleti.KorisniciServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>KorisniciServlet</servlet-name>
+    <url-pattern>/KorisniciServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

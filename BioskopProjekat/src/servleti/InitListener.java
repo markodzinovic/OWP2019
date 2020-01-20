@@ -1,9 +1,13 @@
 package servleti;
 
+import java.util.List;
+
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import dao.ConnectionManager;
+import dao.KorisnikDAO;
+import model.Korisnik;
 
 /**
  * Application Lifecycle Listener implementation class InitListener
@@ -32,7 +36,7 @@ public class InitListener implements ServletContextListener {
     	System.out.println("inicijalizacija...");
 
     	ConnectionManager.open();
-
+    	
 		System.out.println("završeno!");
     }
 	

@@ -3,6 +3,8 @@ package dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import model.Korisnik;
 import model.Korisnik.Uloga;
@@ -26,10 +28,14 @@ public class KorisnikDAO {
 			rset = pstmt.executeQuery();
 
 			if (rset.next()) {
-				String datum = "233";
 				Uloga uloga = Uloga.valueOf(rset.getString(1));
+				
+				Korisnik k1 = new Korisnik();
+				k1.setKorisnickoIme(korisnickoIme);
+				k1.setLozinka(lozinka);
+				k1.setUloga(uloga);
 
-				return new Korisnik(korisnickoIme, lozinka, datum, uloga);
+				return  k1;
 			}
 		} finally {
 			try {pstmt.close();} catch (Exception ex1) {ex1.printStackTrace();}
@@ -38,6 +44,41 @@ public class KorisnikDAO {
 		}
 
 		return null;
+	}
+	
+	public static List<Korisnik> getAll() throws Exception {
+		List<Korisnik> korisnici = new ArrayList<>();
+
+		Connection conn = ConnectionManager.getConnection();
+
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		try {
+			String query = "SELECT * FROM korisnik";
+
+			pstmt = conn.prepareStatement(query);
+					
+
+			rset = pstmt.executeQuery();
+
+			while (rset.next()) {
+				int index = 1;
+				String korisnickoIme = rset.getString(index++);
+				String lozinka = rset.getString(index++);
+				String datumR = rset.getString(index++);
+				Uloga uloga = Uloga.valueOf(rset.getString(index++));
+
+				Korisnik k = new Korisnik(korisnickoIme, lozinka, datumR, uloga);
+				korisnici.add(k);
+			}
+		} finally {
+			try {pstmt.close();} catch (Exception ex1) {ex1.printStackTrace();}
+			try {rset.close();} catch (Exception ex1) {ex1.printStackTrace();}
+			try {conn.close();} catch (Exception ex1) {ex1.printStackTrace();} 
+		}
+		
+		System.out.println(korisnici);
+		return korisnici;
 	}
 
 }
