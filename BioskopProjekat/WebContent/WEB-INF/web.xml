@@ -72,4 +72,24 @@
     <servlet-name>KorisniciServlet</servlet-name>
     <url-pattern>/KorisniciServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>PojedinacniKorisnikServlet</display-name>
+    <servlet-name>PojedinacniKorisnikServlet</servlet-name>
+    <servlet-class>servleti.PojedinacniKorisnikServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>PojedinacniKorisnikServlet</servlet-name>
+    <url-pattern>/PojedinacniKorisnikServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>FilmoviServlet</display-name>
+    <servlet-name>FilmoviServlet</servlet-name>
+    <servlet-class>servleti.FilmoviServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>FilmoviServlet</servlet-name>
+    <url-pattern>/FilmoviServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

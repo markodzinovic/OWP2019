@@ -1,12 +1,15 @@
 package servleti;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import dao.ConnectionManager;
+import dao.FilmDAO;
 import dao.KorisnikDAO;
+import model.Film;
 import model.Korisnik;
 
 /**

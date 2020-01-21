@@ -80,5 +80,40 @@ public class KorisnikDAO {
 		System.out.println(korisnici);
 		return korisnici;
 	}
+	
+	public static Korisnik getKorisnik(String korisnickoIme) throws Exception {
+		Connection conn = ConnectionManager.getConnection();
+		
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		try {
+			String upit = "SELECT lozinka,datum,uloga FROM korisnik WHERE korisnickoIme = ?";
+			
+			pstmt = conn.prepareStatement(upit);
+			pstmt.setString(1, korisnickoIme);
+			System.out.println(pstmt);
+			
+			rset = pstmt.executeQuery();
+			if(rset.next()) {
+				int index = 1;
+				String lozinka = rset.getString(index++);
+				String datum = rset.getString(index++);
+				Uloga uloga = Uloga.valueOf(rset.getString(index++));
+				
+				System.out.println(korisnickoIme+" "+datum+" "+lozinka+" "+uloga );
+				return new Korisnik(korisnickoIme, lozinka, datum, uloga);
+				
+				
+			}
+			
+		} finally {
+			try {pstmt.close();} catch (Exception ex1) {ex1.printStackTrace();}
+			try {rset.close();} catch (Exception ex1) {ex1.printStackTrace();}
+			try {conn.close();} catch (Exception ex1) {ex1.printStackTrace();}
+		}
+		
+		return null;
+	}
 
 }

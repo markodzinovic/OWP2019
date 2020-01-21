@@ -13,14 +13,14 @@ public class Film {
 	private String zemljaPorekla;
 	private int godinaProizvodnje;
 	private String opis;
-	private boolean izbrisan;
+	private boolean obrisan;
 	
 	public Film() {
 		super();
 	}
 
 	public Film(int id, String naziv, String reziser, String glumci, String zanrovi, int trajanje, String distributer,
-			String zemljaPorekla, int godinaProizvodnje, String opis, boolean izbrisan) {
+			String zemljaPorekla, int godinaProizvodnje, String opis, boolean obrisan) {
 		super();
 		this.id = id;
 		this.naziv = naziv;
@@ -32,7 +32,7 @@ public class Film {
 		this.zemljaPorekla = zemljaPorekla;
 		this.godinaProizvodnje = godinaProizvodnje;
 		this.opis = opis;
-		this.izbrisan = izbrisan;
+		this.obrisan = obrisan;
 	}
 
 	public int getId() {
@@ -115,12 +115,12 @@ public class Film {
 		this.opis = opis;
 	}
 
-	public boolean isIzbrisan() {
-		return izbrisan;
+	public boolean isObrisan() {
+		return obrisan;
 	}
 
-	public void setIzbrisan(boolean izbrisan) {
-		this.izbrisan = izbrisan;
+	public void setObrisan(boolean izbrisan) {
+		this.obrisan = izbrisan;
 	}
 	
 	
