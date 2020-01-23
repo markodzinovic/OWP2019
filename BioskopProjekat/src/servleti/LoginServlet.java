@@ -42,16 +42,18 @@ public class LoginServlet extends HttpServlet {
 		
 		try {
 			Korisnik kor = KorisnikDAO.get(korisnickoIme, lozinka);
-			if (kor == null) {
-//				response.sendRedirect("./Login.html");
-				request.getRequestDispatcher("./FailureServlet").forward(request, response);
+			if (kor != null) {
+				//		request.getSession().setAttribute("loggedInUserName", user.getUserName());
+				
+//				response.sendRedirect("./KorisniciServlet");
+
+
+				request.getRequestDispatcher("./SuccessServlet").forward(request, response);
+				
 				return;
 			}
-	
-	//		request.getSession().setAttribute("loggedInUserName", user.getUserName());
-			
-//			response.sendRedirect("./WebShopServlet");
-			request.getRequestDispatcher("./SuccessServlet").forward(request, response);
+//			response.sendRedirect("./Login.html");
+			request.getRequestDispatcher("./FailureServlet").forward(request, response);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

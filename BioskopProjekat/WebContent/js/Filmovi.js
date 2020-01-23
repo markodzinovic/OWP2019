@@ -12,7 +12,7 @@ $(document).ready(function() {
 			
 			for ( f in filmovi) {
 				tabelaFilmovi.append('<tr>'+
-						'<td>' + filmovi[f].naziv + '</td>' + 
+						'<td><a href="PojedinacniFilm.html?id='+filmovi[f].id+'"  >' + filmovi[f].naziv + '</td>' + 
 						'<td>' + filmovi[f].zanrovi + '</td>' +
 						'<td>' + filmovi[f].trajanje + 'min'  + '</td>' +
 						'<td>' + filmovi[f].distributer + '</td>' +

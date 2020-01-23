@@ -26,7 +26,9 @@ $(document).ready(function() { // izvršava se nakon što se izgradi DOM stablo 
 				return;
 			}
 			if (data.status == 'success') {
-				alert("Logovan");
+				console.log('necu da izvrsim')
+				window.location.replace('Filmovi.html');
+				
 			}
 		});
 		// program se odmah nastavlja dalje, pre nego što stigne odgovor

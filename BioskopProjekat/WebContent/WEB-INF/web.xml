@@ -92,4 +92,14 @@
     <servlet-name>FilmoviServlet</servlet-name>
     <url-pattern>/FilmoviServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>PojedinacniFilmServlet</display-name>
+    <servlet-name>PojedinacniFilmServlet</servlet-name>
+    <servlet-class>servleti.PojedinacniFilmServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>PojedinacniFilmServlet</servlet-name>
+    <url-pattern>/PojedinacniFilmServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

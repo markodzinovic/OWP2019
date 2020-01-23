@@ -57,7 +57,6 @@ public class KorisnikDAO {
 			String query = "SELECT * FROM korisnik";
 
 			pstmt = conn.prepareStatement(query);
-					
 
 			rset = pstmt.executeQuery();
 
