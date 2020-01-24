@@ -1,7 +1,7 @@
 $(document).ready(function() {
 	
-	var korisnickoIme = window.location.search.slice(1).split('&')[0].split('=')[1];
-	console.log(korisnickoIme);
+	var korisnickoImeGore = window.location.search.slice(1).split('&')[0].split('=')[1];
+	console.log(korisnickoImeGore);
 	
 	function jedanKorisnik () {
 		
@@ -9,7 +9,7 @@ $(document).ready(function() {
 		var datum = $('#datumP');
 		
 		var param = {
-			'korisnickoIme' : korisnickoIme
+			'korisnickoIme' : korisnickoImeGore
 		}
 		
 		$.get('PojedinacniKorisnikServlet', param , function(data) {
@@ -45,15 +45,22 @@ $(document).ready(function() {
 		
 		 params = {
 			'akcija' : 'izmena',
-			'korisnickoIme' : korisnickoIme,
+			'korisnickoIme' : korisnickoImeGore,
 			'datumRegistracije' : datumRegistracije,
 			'uloga' : uloga
 		}
+
 		
 		$.post('PojedinacniKorisnikServlet', params, function(data) {
 			
+			if(data.status == 'failure'){
+				alert(data.poruka);
+				return;
+			}
+			
 			if (data.status == 'success') {
-				alert("Izmenjen");
+				window.location.replace('Korisnici.html')
+				return;
 			}
 		
 			
@@ -69,12 +76,18 @@ $(document).ready(function() {
 		
 		param = {
 			'akcija' : 'brisanje',
-			'korisnickoIme' : korisnickoIme
+			'korisnickoIme' : korisnickoImeGore
 		}
 		$.post('PojedinacniKorisnikServlet', param , function(data) {
 			
+			if(data.status == 'failure'){
+				alert(data.poruka)
+				return;
+			}
+			
 			if (data.status == 'success') {
-				alert("Obrisan");
+				window.location.replace('Korisnici.html')
+				return;
 			}
 		} )
 		

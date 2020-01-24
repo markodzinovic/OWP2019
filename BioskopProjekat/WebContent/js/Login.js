@@ -22,12 +22,15 @@ $(document).ready(function() { // izvršava se nakon što se izgradi DOM stablo 
 			if (data.status == 'failure') {
 				korisnickoImeI.val('');
 				lozinkaI.val('');
+				
+				alert('Neispravno korisnicko ime ili lozinke')
 
 				return;
 			}
 			if (data.status == 'success') {
-				console.log('necu da izvrsim')
+				
 				window.location.replace('Filmovi.html');
+				return;
 				
 			}
 		});

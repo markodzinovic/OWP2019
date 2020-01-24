@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dao.KorisnikDAO;
+import model.Korisnik;
+import model.Korisnik.Uloga;
 
 /**
  * Servlet implementation class RegistracijaServlet
@@ -39,8 +41,8 @@ public class RegistracijaServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			String korisnickoIme = request.getParameter("korisnickoIme");
-//			if (KorisnikDAO.get(korisnickoIme) != null)
-//				throw new Exception("Korisnicko ime vec postoji!");
+			if (KorisnikDAO.getKorisnik(korisnickoIme) != null)
+				throw new Exception("Korisnicko ime vec postoji!");
 			if ("".equals(korisnickoIme))
 				throw new Exception("Korisnicko ime je prazno!");
 
@@ -48,8 +50,8 @@ public class RegistracijaServlet extends HttpServlet {
 			if ("".equals(lozinka))
 				throw new Exception("Lozinka je prazna!");
 			
-//			Korisnik kor = new User(userName, password, Role.USER);
-//			UserDAO.add(user);
+			Korisnik kor = new Korisnik(korisnickoIme, lozinka, "21.01.2020", Uloga.KORISNIK, false);
+			KorisnikDAO.registracija(kor);
 
 
 			request.getRequestDispatcher("./SuccessServlet").forward(request, response);

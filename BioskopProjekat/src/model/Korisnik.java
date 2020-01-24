@@ -10,17 +10,19 @@ public class Korisnik {
 	private String lozinka;
 	private String datumRegistracije;
 	private Uloga uloga;
+	private boolean obrisan;
 	
 	public Korisnik() {
 		super();
 	}
 
-	public Korisnik(String korisnickoIme, String lozinka, String datumRegistracije, Uloga uloga) {
+	public Korisnik(String korisnickoIme, String lozinka, String datumRegistracije, Uloga uloga, boolean obrisan) {
 		super();
 		this.korisnickoIme = korisnickoIme;
 		this.lozinka = lozinka;
 		this.datumRegistracije = datumRegistracije;
 		this.uloga = uloga;
+		this.obrisan = obrisan;
 	}
 
 	public String getKorisnickoIme() {
@@ -53,6 +55,14 @@ public class Korisnik {
 
 	public void setUloga(Uloga uloga) {
 		this.uloga = uloga;
+	}
+
+	public boolean isObrisan() {
+		return obrisan;
+	}
+
+	public void setObrisan(boolean obrisan) {
+		this.obrisan = obrisan;
 	}
 	
 	

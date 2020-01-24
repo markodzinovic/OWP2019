@@ -31,8 +31,9 @@ $(document).ready(function() {
 				messageParagraph.text(data.message);
 				return;
 			}
-			if (data.status == 'success') {
-				alert("Uspesno registrovan");
+			if (data.status == 'success') {	
+				window.location.replace('Login.html');
+				return;
 			}
 		});
 

@@ -56,42 +56,46 @@ public class PojedinacniKorisnikServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String akcija = request.getParameter("akcija");
-		switch (akcija) {
-		case "izmena":
-			String korisnickoIme = request.getParameter("korisnickoIme");
-			try {
-				Korisnik k = KorisnikDAO.getKorisnik(korisnickoIme);
-				
-				String uloga = request.getParameter("uloga");
-				
-				
-				k.setUloga(Uloga.valueOf(uloga));
-				System.out.println(k.getUloga());
-				request.getRequestDispatcher("./SuccessServlet").forward(request, response);
-				
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			
-			break;
+		try {
+			String akcija = request.getParameter("akcija");
+			switch (akcija) {
+			case "izmena":
+				String korisnickoIme = request.getParameter("korisnickoIme");
 
-		case "brisanje":
-			String korisnickoImeBrisanje = request.getParameter("korisnickoIme");
-			
-			try {
-				Korisnik k = KorisnikDAO.getKorisnik(korisnickoImeBrisanje);
+				Korisnik kI = KorisnikDAO.getKorisnik(korisnickoIme);
+					
+				String uloga = request.getParameter("uloga");
+
+				kI.setUloga(Uloga.valueOf(uloga));
+				
+				KorisnikDAO.izmenaAdmin(kI);
 				
 				request.getRequestDispatcher("./SuccessServlet").forward(request, response);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				break;
+
+			case "brisanje":
+				String korisnickoImeBrisanje = request.getParameter("korisnickoIme");
+
+				KorisnikDAO.brisanjeKorisnika(korisnickoImeBrisanje);
+					
+				request.getRequestDispatcher("./SuccessServlet").forward(request, response);	
+				break;
 			}
 			
-			break;
+		} catch (Exception e) {
+			String poruka = e.getMessage();
+			if(poruka == null) {
+				poruka = "Nepredvidjena greska";
+				e.printStackTrace();
+			}
+			Map<String, Object> data = new LinkedHashMap<>();
+			data.put("poruka", poruka);
+			
+			request.setAttribute("data", data);
+			request.getRequestDispatcher("./FailureServlet").forward(request, response);
+			
 		}
+
 	}
 
 }

@@ -17,7 +17,7 @@ public class KorisnikDAO {
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		try {
-			String query = "SELECT uloga FROM korisnik WHERE korisnickoIme = ? AND lozinka = ?";
+			String query = "SELECT datum,uloga,obrisan FROM korisnik WHERE korisnickoIme = ? AND lozinka = ?";
 
 			pstmt = conn.prepareStatement(query);
 			int index = 1;
@@ -28,14 +28,11 @@ public class KorisnikDAO {
 			rset = pstmt.executeQuery();
 
 			if (rset.next()) {
-				Uloga uloga = Uloga.valueOf(rset.getString(1));
-				
-				Korisnik k1 = new Korisnik();
-				k1.setKorisnickoIme(korisnickoIme);
-				k1.setLozinka(lozinka);
-				k1.setUloga(uloga);
+				String datum = rset.getString(1);
+				Uloga uloga = Uloga.valueOf(rset.getString(2));
+				boolean obrisan = rset.getBoolean(3);
 
-				return  k1;
+				return new Korisnik(korisnickoIme, lozinka, datum, uloga, obrisan);
 			}
 		} finally {
 			try {pstmt.close();} catch (Exception ex1) {ex1.printStackTrace();}
@@ -66,8 +63,9 @@ public class KorisnikDAO {
 				String lozinka = rset.getString(index++);
 				String datumR = rset.getString(index++);
 				Uloga uloga = Uloga.valueOf(rset.getString(index++));
+				boolean obrisan = rset.getBoolean(index++);
 
-				Korisnik k = new Korisnik(korisnickoIme, lozinka, datumR, uloga);
+				Korisnik k = new Korisnik(korisnickoIme, lozinka, datumR, uloga,obrisan);
 				korisnici.add(k);
 			}
 		} finally {
@@ -87,7 +85,7 @@ public class KorisnikDAO {
 		ResultSet rset = null;
 		
 		try {
-			String upit = "SELECT lozinka,datum,uloga FROM korisnik WHERE korisnickoIme = ?";
+			String upit = "SELECT lozinka,datum,uloga,obrisan FROM korisnik WHERE korisnickoIme = ?";
 			
 			pstmt = conn.prepareStatement(upit);
 			pstmt.setString(1, korisnickoIme);
@@ -99,9 +97,10 @@ public class KorisnikDAO {
 				String lozinka = rset.getString(index++);
 				String datum = rset.getString(index++);
 				Uloga uloga = Uloga.valueOf(rset.getString(index++));
+				boolean obrisan = rset.getBoolean(index++);
 				
 				System.out.println(korisnickoIme+" "+datum+" "+lozinka+" "+uloga );
-				return new Korisnik(korisnickoIme, lozinka, datum, uloga);
+				return new Korisnik(korisnickoIme, lozinka, datum, uloga, obrisan);
 				
 				
 			}
@@ -113,6 +112,77 @@ public class KorisnikDAO {
 		}
 		
 		return null;
+	}
+	
+	public static boolean registracija(Korisnik korisnik) throws Exception {
+		Connection conn = ConnectionManager.getConnection();
+		
+		PreparedStatement pstmt = null;
+		try {
+			String upit = "INSERT INTO korisnik (korisnickoIme,lozinka,datum,uloga,obrisan)"
+					+ "VALUES (?,?,?,?,?)";
+			
+			pstmt = conn.prepareStatement(upit);
+			int index = 1;
+			pstmt.setString(index++, korisnik.getKorisnickoIme());
+			pstmt.setString(index++, korisnik.getLozinka());
+			pstmt.setString(index++, korisnik.getDatumRegistracije());
+			pstmt.setString(index++, korisnik.getUloga().toString());
+			pstmt.setBoolean(index++, korisnik.isObrisan());
+			
+			return pstmt.executeUpdate() == 1;
+			
+		} finally {
+			try {pstmt.close();} catch (Exception ex1) {ex1.printStackTrace();}
+			try {conn.close();} catch (Exception ex1) {ex1.printStackTrace();}
+		}
+	}
+	
+	public static boolean izmenaAdmin(Korisnik korisnik) throws Exception {
+		
+		Connection conn = ConnectionManager.getConnection();
+		
+		PreparedStatement pstmt = null;
+		
+		try {
+			String upit = "UPDATE korisnik SET uloga = ? WHERE korisnickoIme = ?";
+			
+			pstmt = conn.prepareStatement(upit);
+			
+			int index = 1;
+			pstmt.setString(index++, korisnik.getUloga().toString());
+			pstmt.setString(index++, korisnik.getKorisnickoIme());
+			
+			return pstmt.executeUpdate() == 1;
+			
+		} finally {
+			try {pstmt.close();} catch (Exception ex1) {ex1.printStackTrace();}
+			try {conn.close();} catch (Exception ex1) {ex1.printStackTrace();}
+		}
+	}
+	
+	public static boolean brisanjeKorisnika(String korisnickoIme) throws Exception{
+		
+		Connection conn = ConnectionManager.getConnection();
+		
+		PreparedStatement pstmt = null;
+		
+		try {
+			String upit = "DELETE FROM korisnik WHERE korisnickoIme = ?";
+			
+			pstmt = conn.prepareStatement(upit);
+			
+			pstmt.setString(1, korisnickoIme);
+			
+			System.out.println(pstmt);
+			
+			return pstmt.executeUpdate() == 1;
+			
+		} finally {
+			try {pstmt.close();} catch (Exception e) {e.printStackTrace();}
+			try {conn.close();} catch (Exception e) {e.printStackTrace();}
+		}
+		
 	}
 
 }
