@@ -13,3 +13,13 @@ CREATE TABLE film (
     obrisan       BOOLEAN      DEFAULT (false) 
                                NOT NULL
 );
+
+CREATE TABLE korisnik (
+    korisnickoIme VARCHAR (20) PRIMARY KEY
+                               NOT NULL,
+    lozinka       VARCHAR (20) NOT NULL,
+    datum         STRING,
+    uloga         VARCHAR (20) NOT NULL,
+    obrisan       BOOLEAN      DEFAULT (false) 
+                               NOT NULL
+);

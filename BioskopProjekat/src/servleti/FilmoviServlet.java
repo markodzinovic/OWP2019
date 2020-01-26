@@ -11,7 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dao.FilmDAO;
+import dao.KorisnikDAO;
 import model.Film;
+import model.Korisnik;
 
 /**
  * Servlet implementation class FilmoviServlet
@@ -33,11 +35,19 @@ public class FilmoviServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		
+		String ulogovan = (String) request.getSession().getAttribute("ulogovan");
+		if(ulogovan == null) {
+			request.getRequestDispatcher("./LogoutServlet").forward(request, response);
+			return;
+		}
+		
 		try {
+			Korisnik uloga =KorisnikDAO.getKorisnik(ulogovan);
 			List<Film> sviFilmovi = FilmDAO.getAll();
 			
 			Map<String, Object> data = new LinkedHashMap<>();
 			data.put("sviFilmovi", sviFilmovi);
+			data.put("uloga", uloga.getUloga().toString());
 			
 			request.setAttribute("data", data);
 			request.getRequestDispatcher("./SuccessServlet").forward(request, response);

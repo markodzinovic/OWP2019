@@ -1,4 +1,13 @@
 $(document).ready(function() {
+	$('#odjava').on('click', function() {
+		$.get('LogoutServlet', function(data) {
+			if(data.status == 'unauthenticated'){
+				window.location.replace('Login.html');
+				return;
+			}
+		})
+		
+	})
 	
 	var korisnickoImeGore = window.location.search.slice(1).split('&')[0].split('=')[1];
 	console.log(korisnickoImeGore);
@@ -15,61 +24,87 @@ $(document).ready(function() {
 		$.get('PojedinacniKorisnikServlet', param , function(data) {
 			console.log(data)
 			
-			var kor = data.korisnik;
+			if(data.status =='unauthenticated'){
+				window.location.replace('Login.html');
+				return;
+			}
 			
-			korisni.val(kor.korisnickoIme);
-			datum.val(kor.datumRegistracije);
-			console.log(kor.uloga)
+			if(data.status == 'success'){
+				console.log(data.uloga)
+				
+				if(data.uloga == 'KORISNIK'){
+					window.location.replace('Glavna.html');
+					return;
+				}
+				if(data.uloga == 'ADMIN'){
+					
+					var kor = data.korisnik;
+					
+					korisni.val(kor.korisnickoIme);
+					datum.val(kor.datumRegistracije);
+					console.log(kor.uloga)
+					
+					var uloga = document.getElementById("ulogaB");
+					
+					uloga.value = kor.uloga;
+					
+					admin();
+					
+					return;
+				}
+				
+				
+			}
 			
-			var uloga = document.getElementById("ulogaB");
 			
-			uloga.value = kor.uloga;
 			
 		})
 		
 	}
 	
-	$('#izmenaKorisnika').on('click', function() {
-		var k = $('#korisnickoImeP');
-		var datumR = $('#datumP');
-		var u = document.getElementById("ulogaB");
+	function admin () {
 		
-		var korisnickoIme = k.val()
-		var datumRegistracije = datumR.val()
-		var uloga = u.value
-		
-		
-		console.log(korisnickoIme)
-		console.log(datumRegistracije)
-		console.log(uloga)
-		
-		 params = {
-			'akcija' : 'izmena',
-			'korisnickoIme' : korisnickoImeGore,
-			'datumRegistracije' : datumRegistracije,
-			'uloga' : uloga
-		}
+		$('#izmenaKorisnika').on('click', function() {
+			var k = $('#korisnickoImeP');
+			var datumR = $('#datumP');
+			var u = document.getElementById("ulogaB");
+			
+			var korisnickoIme = k.val()
+			var datumRegistracije = datumR.val()
+			var uloga = u.value
+			
+			
+			console.log(korisnickoIme)
+			console.log(datumRegistracije)
+			console.log(uloga)
+			
+			 params = {
+				'akcija' : 'izmena',
+				'korisnickoIme' : korisnickoImeGore,
+				'datumRegistracije' : datumRegistracije,
+				'uloga' : uloga
+			}
 
-		
-		$.post('PojedinacniKorisnikServlet', params, function(data) {
 			
-			if(data.status == 'failure'){
-				alert(data.poruka);
-				return;
-			}
+			$.post('PojedinacniKorisnikServlet', params, function(data) {
+				
+				if(data.status == 'failure'){
+					alert(data.poruka);
+					return;
+				}
+				
+				if (data.status == 'success') {
+					window.location.replace('Korisnici.html')
+					return;
+				}
 			
-			if (data.status == 'success') {
-				window.location.replace('Korisnici.html')
-				return;
-			}
-		
+				
+			})
+			
 			
 		})
 		
-		
-	})
-	
-	$('#brisanjeKorisnika').on('click', function() {
+		$('#brisanjeKorisnika').on('click', function() {
 		var k = $('#korisnickoImeP');
 	
 		var korisnickoIme = k.val()
@@ -92,6 +127,8 @@ $(document).ready(function() {
 		} )
 		
 	} )
-	
+		
+	}
+
 	jedanKorisnik();
 })

@@ -29,7 +29,7 @@ $(document).ready(function() { // izvršava se nakon što se izgradi DOM stablo 
 			}
 			if (data.status == 'success') {
 				
-				window.location.replace('Filmovi.html');
+				window.location.replace('Glavna.html');
 				return;
 				
 			}

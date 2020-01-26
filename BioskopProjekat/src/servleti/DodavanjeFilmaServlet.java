@@ -15,15 +15,15 @@ import model.Film;
 import model.Korisnik;
 
 /**
- * Servlet implementation class PojedinacniFilmServlet
+ * Servlet implementation class DodavanjeFilmaServlet
  */
-public class PojedinacniFilmServlet extends HttpServlet {
+public class DodavanjeFilmaServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public PojedinacniFilmServlet() {
+    public DodavanjeFilmaServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -32,28 +32,20 @@ public class PojedinacniFilmServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		// TODO Auto-generated method stub
 		String ulogovan = (String) request.getSession().getAttribute("ulogovan");
 		if(ulogovan == null) {
 			request.getRequestDispatcher("./LogoutServlet").forward(request, response);
 			return;
 		}
-		
-		try {			
+		try {
 			Korisnik uloga = KorisnikDAO.getKorisnik(ulogovan);
-
-			String idFilma = request.getParameter("idFilma");
-			int id = Integer.parseInt(idFilma);
-
 			
-			Film film = FilmDAO.getFilm(id);
 			Map<String, Object> data = new LinkedHashMap<>();
-			data.put("film", film);
 			data.put("uloga", uloga.getUloga().toString());
 			
 			request.setAttribute("data", data);
 			request.getRequestDispatcher("./SuccessServlet").forward(request, response);
-			
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
@@ -65,79 +57,67 @@ public class PojedinacniFilmServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		
-		
 		try {
 			String akcija = request.getParameter("akcija");
 			switch (akcija) {
-			case "izmena":
-				String idFilma = request.getParameter("idFilma");
-				int id = Integer.parseInt(idFilma);
-				
-
-				Film f =FilmDAO.getFilm(id);
-				String naziv = request.getParameter("naziv");
-				if(naziv.equals("")) {
+			case "dodavanje":
+				String nazivD = request.getParameter("nazivD");
+				if(nazivD.equals("")) {
 					throw new Exception("Naizv filma je prazan");
 				}
-				String reziser = request.getParameter("reziser");
-				if(reziser.equals("")) {
+				String reziserD = request.getParameter("reziserD");
+				if(reziserD.equals("")) {
 					throw new Exception("Reziser filma je prazan");
 				}
-				String glumci = request.getParameter("glumci");
-				if(glumci.equals("")) {
+				String glumciD = request.getParameter("glumciD");
+				if(glumciD.equals("")) {
 					throw new Exception("Glumci filma je prazan");
 				}
-				String zanrovi = request.getParameter("zanrovi");
-				if(zanrovi.equals("")) {
+				String zanroviD = request.getParameter("zanroviD");
+				if(zanroviD.equals("")) {
 					throw new Exception("Zanrovi filma je prazan");
 				}
-				String trajanje = request.getParameter("trajanje");
-				int traja = Integer.parseInt(trajanje);
-				if(traja < 0) {
+				String trajanjeD = request.getParameter("trajanjeD");
+				int trajaD = Integer.parseInt(trajanjeD);
+				if(trajaD < 0) {
 					throw new Exception("Trajanje filma treba da bude vece 0");
 				}
-				String distributer = request.getParameter("distributer");
-				if(distributer.equals("")) {
+				String distributerD = request.getParameter("distributerD");
+				if(distributerD.equals("")) {
 					throw new Exception("Distributer filma je prazan");
 				}
-				String zemlja = request.getParameter("zemlja");
-				if(zemlja.equals("")) {
+				String zemljaD = request.getParameter("zemljaD");
+				if(zemljaD.equals("")) {
 					throw new Exception("Zemlja porekla filma je prazan");
 				}
-				String godina = request.getParameter("godina");
-				int god = Integer.parseInt(godina);
-				if(god < 0) {
+				String godinaD = request.getParameter("godinaD");
+				int godD = Integer.parseInt(godinaD);
+				if(godD < 0) {
 					throw new Exception("Godina filma treba da bude vece 0");
 				}
-				String opis = request.getParameter("opis");
-				if(opis.equals("")) {
+				String opisD = request.getParameter("opisD");
+				if(opisD.equals("")) {
 					throw new Exception("Opis porekla filma je prazan");
 				}
+
+				Film film = new Film();
+				film.setNaziv(nazivD);
+				film.setReziser(reziserD);
+				film.setGlumci(glumciD);
+				film.setZanrovi(zanroviD);
+				film.setTrajanje(trajaD);
+				film.setDistributer(distributerD);
+				film.setZemljaPorekla(zemljaD);
+				film.setGodinaProizvodnje(godD);
+				film.setOpis(opisD);
 				
-				f.setNaziv(naziv);
-				f.setReziser(reziser);
-				f.setGlumci(glumci);
-				f.setZanrovi(zanrovi);
-				f.setTrajanje(traja);
-				f.setDistributer(distributer);
-				f.setZemljaPorekla(zemlja);
-				f.setGodinaProizvodnje(god);
-				f.setOpis(opis);
-				
-				FilmDAO.izmenaFilma(f);
+				FilmDAO.dodavanjeFilma(film);
 				request.getRequestDispatcher("./SuccessServlet").forward(request, response);
+				
 				break;
 
-			case "brisanje":
-
-					String idFilmaBrisanje = request.getParameter("idFilma");
-					int idBrisanje = Integer.parseInt(idFilmaBrisanje);
-					
-					FilmDAO.brisanjeFilma(idBrisanje);
-					request.getRequestDispatcher("./SuccessServlet").forward(request, response);
-					break;
-		}
+				
+			}
 			
 		} catch (Exception e) {
 			String poruka = e.getMessage();
@@ -151,10 +131,7 @@ public class PojedinacniFilmServlet extends HttpServlet {
 			data.put("poruka", poruka);
 			request.setAttribute("data", data);
 			request.getRequestDispatcher("./FailureServlet").forward(request, response);
-			
 		}
-
-
 	}
 
 }

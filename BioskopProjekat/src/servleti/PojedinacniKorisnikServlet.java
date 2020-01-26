@@ -32,15 +32,25 @@ public class PojedinacniKorisnikServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String korisnickoIme = request.getParameter("korisnickoIme");
-		System.out.println("Ovo je korisnicko ime: " + korisnickoIme );
+		
+		String ulogovan = (String) request.getSession().getAttribute("ulogovan");
+		if(ulogovan == null) {
+			request.getRequestDispatcher("./LogoutServlet").forward(request, response);
+			return;
+		}
 		
 		try {
+			Korisnik uloga = KorisnikDAO.getKorisnik(ulogovan);
+			
+			String korisnickoIme = request.getParameter("korisnickoIme");
+			System.out.println("Ovo je korisnicko ime: " + korisnickoIme );
+			
 			Korisnik korisnik = KorisnikDAO.getKorisnik(korisnickoIme);
 			System.out.println(korisnik.getDatumRegistracije());
 			
 			Map<String, Object> data = new LinkedHashMap<>();
 			data.put("korisnik", korisnik);
+			data.put("uloga", uloga.getUloga().toString());
 			
 			request.setAttribute("data", data);
 			request.getRequestDispatcher("./SuccessServlet").forward(request, response);
@@ -56,6 +66,13 @@ public class PojedinacniKorisnikServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		String ulogovan = (String) request.getSession().getAttribute("ulogovan");
+		
+		if(ulogovan == null) {
+			request.getRequestDispatcher("./LogoutServlet").forward(request, response);
+			return;
+		}
+		
 		try {
 			String akcija = request.getParameter("akcija");
 			switch (akcija) {
@@ -75,6 +92,11 @@ public class PojedinacniKorisnikServlet extends HttpServlet {
 
 			case "brisanje":
 				String korisnickoImeBrisanje = request.getParameter("korisnickoIme");
+				Korisnik k = KorisnikDAO.getKorisnik(ulogovan);
+				
+				if(k.getKorisnickoIme().equals(korisnickoImeBrisanje)) {
+					throw new Exception("Ne mozete obrisati sebe");
+				}
 
 				KorisnikDAO.brisanjeKorisnika(korisnickoImeBrisanje);
 					

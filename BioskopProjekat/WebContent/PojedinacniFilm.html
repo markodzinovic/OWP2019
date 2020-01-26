@@ -8,21 +8,25 @@
 </head>
 <body>
 	<table>
-		<tr><td align="right">Naziv:</td><td><input  type="text" id="nazivFilma" name="nazivFilma"/></td></tr>
-		<tr><td align="right">Reziser:</td><td><input  type="text" id="reziserFilm" name="reziserFilm"/></td></tr>
-		<tr><td align="right">Glumci:</td><td><input  type="text" id="glumciFilm" name="glumciFilm"></td></tr>
-		<tr><td align="right">Zanrovi:</td><td><input  type="text" id="zanroviFilm" name="zanroviFilm"></td></tr>
-		<tr><td align="right">Trajanje:</td><td><input  type="number" id="trajanjeFilm" name="trajanjeFilm"></td></tr>
-		<tr><td align="right">Distributer:</td><td><input  type="text" id="distributerFilm" name="distributerFilm"></td></tr>
-		<tr><td align="right">Zemlja porekla:</td><td><input  type="text" id="zemljaFilm" name="zemljaFilm"></td></tr>
-		<tr><td align="right">Godina:</td><td><input  type="number" id="godinaFilm" name="godinaFilm"></td></tr>
-		<tr><td align="right">Opis:</td><td><input  type="text" id="opisFilm" name="opisFilm"></td></tr>
+		<tr><td align="right">Naziv:</td><td><input disabled="disabled" type="text" id="nazivFilma" name="nazivFilma"/></td></tr>
+		<tr><td align="right">Reziser:</td><td><input disabled="disabled" type="text"  id="reziserFilm" name="reziserFilm"/></td></tr>
+		<tr><td align="right">Glumci:</td><td><input disabled="disabled" type="text" id="glumciFilm" name="glumciFilm"></td></tr>
+		<tr><td align="right">Zanrovi:</td><td><input disabled="disabled" type="text" id="zanroviFilm" name="zanroviFilm"></td></tr>
+		<tr><td align="right">Trajanje:</td><td><input disabled="disabled" type="number" id="trajanjeFilm" name="trajanjeFilm"></td></tr>
+		<tr><td align="right">Distributer:</td><td><input disabled="disabled" type="text" id="distributerFilm" name="distributerFilm"></td></tr>
+		<tr><td align="right">Zemlja porekla:</td><td><input disabled="disabled" type="text" id="zemljaFilm" name="zemljaFilm"></td></tr>
+		<tr><td align="right">Godina:</td><td><input disabled="disabled" type="number" id="godinaFilm" name="godinaFilm"></td></tr>
+		<tr><td align="right">Opis:</td><td><input disabled="disabled" type="text" id="opisFilm" name="opisFilm"></td></tr>
 	</table>
+	
 	<p  style="color: blue" id="porukaParagraf"/>
+	
 	<table id="admin">
-	<tr><td align="right">Admin:</td><td align="right"><input type="button" id="izmeniFilm" value="Izmeni"></td><td align="right"><input type="button" id="obrisiFilm" value="Obrisi"/></td></tr>
+		<tr><td align="right">Admin:</td><td align="right"><input type="button" id="izmeniFilm" value="Izmeni"></td><td align="right"><input type="button" id="obrisiFilm" value="Obrisi"/></td></tr>
 	</table>
-		
-		<input type="submit" value="Odblokiraj" id="odblokiraj">
+	
+	<a href="#">Profil</a><br>
+	<a href="#" id="odjava">Odjava</a><br>
+
 </body>
 </html>
