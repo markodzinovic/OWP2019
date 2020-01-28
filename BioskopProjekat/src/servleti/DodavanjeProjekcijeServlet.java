@@ -10,21 +10,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import dao.KorisnikDAO;
-import dao.ProjekcijeDAO;
-import model.Korisnik;
-import model.Projekcije;
+import dao.FilmDAO;
+import dao.SalaDao;
+import model.Film;
+import model.Sala;
 
 /**
- * Servlet implementation class GlavnaServlet
+ * Servlet implementation class DodavanjeProjekcijeServlet
  */
-public class GlavnaServlet extends HttpServlet {
+public class DodavanjeProjekcijeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public GlavnaServlet() {
+    public DodavanjeProjekcijeServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -34,25 +34,20 @@ public class GlavnaServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String ulogovan = (String) request.getSession().getAttribute("ulogovan");
-		if(ulogovan == null) {
-			request.getRequestDispatcher("./LogoutServlet").forward(request, response);
-			return;
-		}
-		
 		try {
-			Korisnik uloga = KorisnikDAO.getKorisnik(ulogovan);
 			
-			List<Projekcije> sveProjekcije = ProjekcijeDAO.getAll();
+			List<Film> sviFilmovi = FilmDAO.getAll();
+			List<Sala> sveSale = SalaDao.getAll();
 			
 			Map<String, Object> data = new LinkedHashMap<>();
-			data.put("uloga", uloga.getUloga().toString());
-			data.put("sveProjekcije", sveProjekcije);
+			data.put("sviFilmovi", sviFilmovi);
+			data.put("sveSale", sveSale);
 			
 			request.setAttribute("data", data);
 			request.getRequestDispatcher("./SuccessServlet").forward(request, response);
+			
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 	}
 

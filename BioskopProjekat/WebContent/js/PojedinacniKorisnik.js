@@ -105,9 +105,6 @@ $(document).ready(function() {
 		})
 		
 		$('#brisanjeKorisnika').on('click', function() {
-		var k = $('#korisnickoImeP');
-	
-		var korisnickoIme = k.val()
 		
 		param = {
 			'akcija' : 'brisanje',

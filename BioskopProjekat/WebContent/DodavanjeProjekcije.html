@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="js/jquery-3.3.1.js"></script>
+<script src="js/DodavanjeProjekcije.js"></script>
+<title>Dodavanje projekcije</title>
+</head>
+<body>
+	<table>
+		<tr><td align="right">Film: </td><td><select id="filmDP" name="filmDP"></select></td></tr>
+		<tr><td align="right">Datum: </td><td><input  type="text" id="datumDP" name="datumDP"></td></tr>
+		<tr><td align="right">Sala: </td><td><select id="salaDP" name="salaDP">
+												<option selected="selected" value="0"></option>
+												<option value="1">sala1</option>
+												<option value="2">sala2</option>
+												<option value="3">sala3</option>
+											</select></td></tr>
+		<tr><td align="right">Tip: </td><td><select id="tipDP" name="tipDP"></select></td></tr>
+		<tr><td align="right">Cena: </td><td><input  type="number" id="cenaDP" name="cenaDP"></td></tr>
+	</table>
+	<input type="button" id="dodajProjekciju" value="Dodaj projekciju">
+</body>
+</html>

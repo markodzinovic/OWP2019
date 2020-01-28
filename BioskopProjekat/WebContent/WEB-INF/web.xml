@@ -117,4 +117,24 @@
     <servlet-name>DodavanjeFilmaServlet</servlet-name>
     <url-pattern>/DodavanjeFilmaServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>PojedinacnaProjekcijaServlet</display-name>
+    <servlet-name>PojedinacnaProjekcijaServlet</servlet-name>
+    <servlet-class>servleti.PojedinacnaProjekcijaServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>PojedinacnaProjekcijaServlet</servlet-name>
+    <url-pattern>/PojedinacnaProjekcijaServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>DodavanjeProjekcijeServlet</display-name>
+    <servlet-name>DodavanjeProjekcijeServlet</servlet-name>
+    <servlet-class>servleti.DodavanjeProjekcijeServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DodavanjeProjekcijeServlet</servlet-name>
+    <url-pattern>/DodavanjeProjekcijeServlet</url-pattern>
+  </servlet-mapping>
 </web-app>
