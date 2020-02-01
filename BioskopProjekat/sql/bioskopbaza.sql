@@ -84,4 +84,4 @@ CREATE TABLE projekcije (
 );
 
 INSERT INTO projekcije (nazivFilma,tipProjekcije,sala,datum,cena,admin) VALUES (1,1,1,'29.01.2020',15,'a');
-INSERT INTO projekcije (nazivFilma,tipProjekcije,sala,datum,cena,admin) VALUES (1,1,1,'01.02.2020',25,'a');
+INSERT INTO projekcije (nazivFilma,tipProjekcije,sala,datum,cena,admin) VALUES (1,4,1,'01.02.2020',25,'a');

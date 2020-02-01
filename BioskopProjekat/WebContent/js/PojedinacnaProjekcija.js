@@ -37,4 +37,26 @@ $(document).ready(function() {
 		}
 	})
 	
+	adminBrisanje.on('click', function() {
+	
+		params = {
+				'akcija' : 'brisanje',
+				'idProjekcije' : idProjekcije
+		}
+		console.log(idProjekcije);
+		$.post('PojedinacnaProjekcijaServlet', params , function(data) {
+			console.log(data);
+			if(data.status == 'failure'){
+				alert('Ne moze da se obrise');
+				return;
+			}
+			if(data.status == 'success'){
+				window.location.replace('Glavna.html');
+				return;
+			}
+		})
+		
+	})
+	
+	
 })

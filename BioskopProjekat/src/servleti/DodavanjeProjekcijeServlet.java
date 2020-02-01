@@ -10,10 +10,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+
 import dao.FilmDAO;
+import dao.KorisnikDAO;
+import dao.ProjekcijeDAO;
 import dao.SalaDao;
+import dao.TipoviProjekcijaDAO;
 import model.Film;
+import model.Korisnik;
+import model.Projekcije;
 import model.Sala;
+import model.TipoviProjekcije;
 
 /**
  * Servlet implementation class DodavanjeProjekcijeServlet
@@ -56,7 +63,65 @@ public class DodavanjeProjekcijeServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+			
+		String akcija = request.getParameter("akcija");
+		try {
+		switch (akcija) {
+			case "dodavanje":
+				String f = request.getParameter("film");
+				if(f.equals("")) {
+					throw new Exception("Niste izabrali film");
+				}
+				Film film = FilmDAO.getFilm(Integer.parseInt(f));
+				System.out.println(film.getNaziv());
+				String datum = request.getParameter("datum");
+				if(datum.equals("")) {
+					throw new Exception("Datum je prazan");
+				}
+				String s = request.getParameter("sala");
+				if(s.equals("") || s.equals("0")) {
+					throw new Exception("Sala nije izabrana");
+				}
+				Sala sala = SalaDao.getSala(Integer.parseInt(s));
+				System.out.println(sala.getNaziv());
+				String t = request.getParameter("tipProjekcije");
+				if(t.equals("")) {
+					throw new Exception("Tip projekcije nije izabran");
+				}
+				TipoviProjekcije tip = TipoviProjekcijaDAO.getTip(Integer.parseInt(t));
+				System.out.println(tip.getNaziv());
+				double cena = Double.parseDouble(request.getParameter("cena"));
+				if(cena < 0) {
+					throw new Exception("Cena ne sme biti manja od nule");
+				}
+				
+				Projekcije projekcija = new Projekcije();
+				projekcija.setNazivFilma(film);
+				projekcija.setDatum(datum);
+				projekcija.setSala(sala);
+				projekcija.setTipProjekcije(tip);
+				Korisnik admin = KorisnikDAO.getKorisnik("a");
+				projekcija.setAdministrator(admin);
+				projekcija.setCena(cena);
+				
+				ProjekcijeDAO.dodavanjeProjekcije(projekcija);
+				
+				request.getRequestDispatcher("./SuccessServlet").forward(request, response);
+				break;
+			}
+			
+		} catch (Exception e) {
+			String poruka = e.getMessage();
+			if(poruka == null) {
+				poruka = "Nepredvidjena greska";
+				e.printStackTrace();
+			}
+			Map<String, Object> data = new LinkedHashMap<>();
+			data.put("poruka", poruka);
+			
+			request.setAttribute("data", data);
+			request.getRequestDispatcher("./FailureServlet").forward(request, response);
+		}
 	}
 
 }

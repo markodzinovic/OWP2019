@@ -53,7 +53,23 @@ public class PojedinacnaProjekcijaServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+		String akcija = request.getParameter("akcija");
+		try {
+			switch (akcija) {
+			case "brisanje":
+				String idProjekcije = request.getParameter("idProjekcije");
+				int id = Integer.parseInt(idProjekcije);
+				
+				ProjekcijeDAO.brisanjeProjekcije(id);
+				request.getRequestDispatcher("./SuccessServlet").forward(request, response);
+	
+				break;
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			request.getRequestDispatcher("./FailureServlet").forward(request, response);
+		}
 	}
 
 }

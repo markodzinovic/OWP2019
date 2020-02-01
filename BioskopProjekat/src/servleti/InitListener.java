@@ -47,7 +47,7 @@ public class InitListener implements ServletContextListener {
     	System.out.println("inicijalizacija...");
 
     	ConnectionManager.open();
-    	
+
 		System.out.println("završeno!");
     }
 	

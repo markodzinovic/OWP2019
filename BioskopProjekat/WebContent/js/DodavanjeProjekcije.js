@@ -27,11 +27,33 @@ $(document).ready(function() {
 			
 			dodaj.on('click', function() {
 				
-				console.log("Id filma: "+filmDP.value);
-				console.log("Id sale: "+salaDP.value);
-				console.log("Id tipa projekcije: "+tipDP.value);
-				console.log("Datum: "+datumDP.val());
-				console.log("Cena: "+cenaDP);
+				var film = filmDP.value;
+				var datum = datumDP.val();
+				var sala = salaDP.value;
+				var tipProjekcije = tipDP.value;
+				var cena = cenaDP.val();
+				
+				params = {
+						'akcija' : 'dodavanje',
+						'film' : film,
+						'datum' : datum,
+						'sala' : sala,
+						'tipProjekcije' : tipProjekcije,
+						'cena' : cena
+				}
+				
+				$.post('DodavanjeProjekcijeServlet', params, function(data) {
+					console.log(data);
+					
+					if(data.status == 'failure'){
+						alert(data.poruka);
+						return;
+					}
+					if(data.status == 'success'){
+						window.location.replace('Glavna.html');
+						return;
+					}
+				})
 			})
 			
 			

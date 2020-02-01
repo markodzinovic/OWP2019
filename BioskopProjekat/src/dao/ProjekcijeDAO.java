@@ -106,5 +106,57 @@ public class ProjekcijeDAO {
 		return sveProjekcije;
 	}
 	
+	public static boolean dodavanjeProjekcije(Projekcije projekcija) throws Exception{
+		
+		Connection conn = ConnectionManager.getConnection();
+		
+		PreparedStatement pstmt = null;
+		
+		try {
+			String upit = "INSERT INTO projekcije (nazivFilma,tipProjekcije,sala,datum,cena,admin) VALUES (?,?,?,?,?,?)";
+			
+			pstmt = conn.prepareStatement(upit);
+			
+			int index = 1;
+			
+			pstmt.setInt(index++, projekcija.getNazivFilma().getId());
+			pstmt.setInt(index++, projekcija.getTipProjekcije().getId());
+			pstmt.setInt(index++, projekcija.getSala().getId());
+			pstmt.setString(index++, projekcija.getDatum());
+			pstmt.setDouble(index++, projekcija.getCena());
+			pstmt.setString(index++, projekcija.getAdministrator().getKorisnickoIme());
+			
+			System.out.println(pstmt);
+			
+			return pstmt.executeUpdate() == 1;
+			
+		} finally {
+			try {pstmt.close();} catch (Exception e1) {e1.printStackTrace();}
+			try {conn.close();} catch (Exception e1) {e1.printStackTrace();}
+		}
+		
+	}
+	
+	public static boolean brisanjeProjekcije(int id) throws Exception{
+		
+		Connection conn = ConnectionManager.getConnection();
+		
+		PreparedStatement pstmt = null;
+		
+		try {
+			String upit = "DELETE FROM projekcije WHERE id = ?";
+			
+			pstmt = conn.prepareStatement(upit);
+			
+			pstmt.setInt(1, id);
+			
+			System.out.println(pstmt);
+			
+			return pstmt.executeUpdate() == 1;
+		} finally {
+			try {pstmt.close();} catch (Exception e1) {e1.printStackTrace();}
+			try {conn.close();} catch (Exception e1) {e1.printStackTrace();}
+		}
+	}
 
 }
