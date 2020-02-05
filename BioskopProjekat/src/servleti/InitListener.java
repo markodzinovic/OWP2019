@@ -10,11 +10,13 @@ import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
 
 import dao.ConnectionManager;
 import dao.FilmDAO;
+import dao.KartaDAO;
 import dao.KorisnikDAO;
 import dao.ProjekcijeDAO;
 import dao.SalaDao;
 import dao.TipoviProjekcijaDAO;
 import model.Film;
+import model.Karta;
 import model.Korisnik;
 import model.Projekcije;
 import model.Sala;
@@ -47,7 +49,7 @@ public class InitListener implements ServletContextListener {
     	System.out.println("inicijalizacija...");
 
     	ConnectionManager.open();
-
+    	
 		System.out.println("završeno!");
     }
 	
