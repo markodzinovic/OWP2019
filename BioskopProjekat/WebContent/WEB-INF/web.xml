@@ -147,4 +147,14 @@
     <servlet-name>KarteServlet</servlet-name>
     <url-pattern>/KarteServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>KupovinaKarteServlet</display-name>
+    <servlet-name>KupovinaKarteServlet</servlet-name>
+    <servlet-class>servleti.KupovinaKarteServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>KupovinaKarteServlet</servlet-name>
+    <url-pattern>/KupovinaKarteServlet</url-pattern>
+  </servlet-mapping>
 </web-app>
