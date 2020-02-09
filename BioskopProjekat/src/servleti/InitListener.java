@@ -1,5 +1,7 @@
 package servleti;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +17,7 @@ import dao.KorisnikDAO;
 import dao.ProjekcijeDAO;
 import dao.SalaDao;
 import dao.TipoviProjekcijaDAO;
+import javafx.scene.chart.PieChart.Data;
 import model.Film;
 import model.Karta;
 import model.Korisnik;
@@ -50,6 +53,14 @@ public class InitListener implements ServletContextListener {
 
     	ConnectionManager.open();
     	
+//    	LocalDate datum;
+//    	
+//    	datum = LocalDate.now();
+//    	
+//    	Date dat = Date.valueOf(datum);
+//    	System.out.println(dat);
+//    	
+//    	
 		System.out.println("završeno!");
     }
 	

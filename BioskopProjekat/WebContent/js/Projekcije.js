@@ -11,12 +11,10 @@ $(document).ready(function() {
 	
 	var tabelaProjekcije = $('#projekcijaTabela')
 	var admin = $('#admin');
-	var korisnik = $('#korisnik');
-
-	korisnik.hide();
+	
 	admin.hide();
 	
-	$.get('GlavnaServlet', function(data) {
+	$.get('ProjekcijeServlet', function(data) {
 		console.log(data);
 		
 		if(data.status == 'unauthenticated'){
@@ -37,23 +35,12 @@ $(document).ready(function() {
 						'<td><a  href="KupovinaKarte.html?id='+projekcije[i].id+'">Kupi kartu</a></td>' +
 				'</tr>')
 			}
-			
-			
-			
-			if(data.uloga == 'KORISNIK'){
-				korisnik.show();
-				return;
-			}
-			
-			
+					
 			if(data.uloga == 'ADMIN'){
 				$('td:nth-child(6)').hide();
-				korisnik.hide();
 				admin.show();
 				return;
 			}
 		}
-		
 	})
-	
 })

@@ -2,10 +2,43 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<script src="js/jquery-3.3.1.js"></script>
+<script src="js/PocetnaStrana.js"></script>
+<title>Pocetna Stranica</title>
 </head>
 <body>
-<a href="Login.html">Prijava/Registracija</a>
-
+	<h3>Projekcije:</h3>
+	<table border="1" id="projekcijaTabela">
+		<tr bgcolor="lightgrey">
+			<th>Film</th>
+			<th>Datum</th>
+			<th>Tip</th>
+			<th>Sala</th>
+			<th>Cena</th>
+		</tr>
+		<tr>
+		
+		</tr>
+	</table>
+	<p>
+		<input type="button" id="pokazi" value="Pokazi sve filmovi"><input type="button" id="sakrij" value="Sakrij filmovi">
+	</p>
+	
+	<h3 id="film">Svi filmovi:</h3>
+	<table border="1" id="filmoviTabela">
+		<tr bgcolor="lightgrey">
+			<th>Naziv</th>
+			<th>Žanr</th>
+			<th>Trajanje</th>
+			<th>Distributer</th>
+			<th>Zemlja porekla</th>
+			<th>Godina proizvodnje</th>
+		</tr>
+		<tr>
+		
+		</tr>
+	</table>
+	
+	<p><a href="Login.html">Prijava/Registracija</a></p>
 </body>
 </html>

@@ -11,7 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dao.KartaDAO;
+import dao.KorisnikDAO;
 import model.Karta;
+import model.Korisnik;
 
 /**
  * Servlet implementation class KarteServlet
@@ -32,14 +34,30 @@ public class KarteServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		
+		String ulogovan = (String) request.getSession().getAttribute("ulogovan");
+		if(ulogovan == null) {
+			request.getRequestDispatcher("./LogoutServlet").forward(request, response);
+			return;
+		}
 		try {
-			List<Karta> sveKarte = KartaDAO.getAll();
+			Korisnik k = KorisnikDAO.getKorisnik(ulogovan);
 			
-			Map<String, Object> data = new LinkedHashMap<>();
-			data.put("sveKarte", sveKarte);
-			
-			request.setAttribute("data", data);
+			if(k.getUloga().toString().equals("KORISNIK")) {
+				List<Karta> sveKarte = KartaDAO.karteJednogKorisnika(k.getKorisnickoIme());
+				
+				Map<String, Object> data = new LinkedHashMap<>();
+				data.put("uloga", k.getUloga().toString());
+				data.put("sveKarte", sveKarte);
+				request.setAttribute("data", data);
+			}else {
+				List<Karta> sveKarte = KartaDAO.getAll();
+				
+				Map<String, Object> data = new LinkedHashMap<>();
+				data.put("uloga", k.getUloga().toString());
+				data.put("sveKarte", sveKarte);
+				request.setAttribute("data", data);
+			}
+
 			request.getRequestDispatcher("./SuccessServlet").forward(request, response);
 		} catch (Exception e) {
 			// TODO: handle exception

@@ -1,4 +1,13 @@
 $(document).ready(function() {
+	$('#odjava').on('click', function() {
+		$.get('LogoutServlet', function(data) {
+			if(data.status == 'unauthenticated'){
+				window.location.replace('Login.html');
+				return;
+			}
+		})
+		
+	})
 	
 	var filmDP =  document.getElementById('filmDP');
 	var datumDP = $('#datumDP')
@@ -12,54 +21,62 @@ $(document).ready(function() {
 		
 		console.log(data);
 		
-		if(data.status == 'success'){
-			
-			console.log(data.sviFilmovi)
-			
-			
-			var filmovi = data.sviFilmovi;
-			var sale = data.sveSale;
-			
-			filmoviIDNaziv(filmDP, filmovi);
-			$('#salaDP').on('change', function (lista) {
-				salaPromena(sale);
-			})
-			
-			dodaj.on('click', function() {
-				
-				var film = filmDP.value;
-				var datum = datumDP.val();
-				var sala = salaDP.value;
-				var tipProjekcije = tipDP.value;
-				var cena = cenaDP.val();
-				
-				params = {
-						'akcija' : 'dodavanje',
-						'film' : film,
-						'datum' : datum,
-						'sala' : sala,
-						'tipProjekcije' : tipProjekcije,
-						'cena' : cena
-				}
-				
-				$.post('DodavanjeProjekcijeServlet', params, function(data) {
-					console.log(data);
-					
-					if(data.status == 'failure'){
-						alert(data.poruka);
-						return;
-					}
-					if(data.status == 'success'){
-						window.location.replace('Glavna.html');
-						return;
-					}
-				})
-			})
-			
-			
-			
+		if(data.status == 'unauthenticated'){
+			window.location.replace('Login.html');
+			return;
 		}
 		
+		if(data.status == 'success'){
+			
+			if(data.uloga == 'KORISNIK'){
+				window.location.replace('Glavna.html');
+				return;
+			}
+		
+			if(data.uloga == 'ADMIN'){
+				console.log(data.sviFilmovi)
+				
+				
+				var filmovi = data.sviFilmovi;
+				var sale = data.sveSale;
+				
+				filmoviIDNaziv(filmDP, filmovi);
+				$('#salaDP').on('change', function (lista) {
+					salaPromena(sale);
+				})
+				
+				dodaj.on('click', function() {
+					
+					var film = filmDP.value;
+					var datum = datumDP.val();
+					var sala = salaDP.value;
+					var tipProjekcije = tipDP.value;
+					var cena = cenaDP.val();
+					
+					params = {
+							'akcija' : 'dodavanje',
+							'film' : film,
+							'datum' : datum,
+							'sala' : sala,
+							'tipProjekcije' : tipProjekcije,
+							'cena' : cena
+					}
+					
+					$.post('DodavanjeProjekcijeServlet', params, function(data) {
+						console.log(data);
+						
+						if(data.status == 'failure'){
+							alert(data.poruka);
+							return;
+						}
+						if(data.status == 'success'){
+							window.location.replace('Glavna.html');
+							return;
+						}
+					})
+				})
+			}
+		}
 	})
 	
 	function filmoviIDNaziv(p1,l1) {

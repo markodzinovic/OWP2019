@@ -9,21 +9,23 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dao.FilmDAO;
+import dao.KartaDAO;
 import dao.KorisnikDAO;
-import dao.ProjekcijeDAO;
+import model.Film;
+import model.Karta;
 import model.Korisnik;
-import model.Projekcije;
 
 /**
- * Servlet implementation class PojedinacnaProjekcijaServlet
+ * Servlet implementation class PojedinacnaKartaServlet
  */
-public class PojedinacnaProjekcijaServlet extends HttpServlet {
+public class PojedinacnaKartaServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public PojedinacnaProjekcijaServlet() {
+    public PojedinacnaKartaServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -38,24 +40,25 @@ public class PojedinacnaProjekcijaServlet extends HttpServlet {
 			request.getRequestDispatcher("./LogoutServlet").forward(request, response);
 			return;
 		}
-		try {
+		
+		try {			
 			Korisnik uloga = KorisnikDAO.getKorisnik(ulogovan);
+
+			String idKarte = request.getParameter("idKarte");
+			int id = Integer.parseInt(idKarte);
+
 			
-			String idProjekcije = request.getParameter("idProjekcije");
-			int id = Integer.parseInt(idProjekcije);
-			
-			Projekcije p = ProjekcijeDAO.getProjekcija(id);
+			Karta karta = KartaDAO.getKarta(id);
 			Map<String, Object> data = new LinkedHashMap<>();
+			data.put("karta", karta);
 			data.put("uloga", uloga.getUloga().toString());
-			data.put("projekcija", p);
 			
 			request.setAttribute("data", data);
 			request.getRequestDispatcher("./SuccessServlet").forward(request, response);
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			// TODO: handle exception
 		}
-		
 	}
 
 	/**
@@ -63,23 +66,7 @@ public class PojedinacnaProjekcijaServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String akcija = request.getParameter("akcija");
-		try {
-			switch (akcija) {
-			case "brisanje":
-				String idProjekcije = request.getParameter("idProjekcije");
-				int id = Integer.parseInt(idProjekcije);
-				
-				ProjekcijeDAO.brisanjeProjekcije(id);
-				request.getRequestDispatcher("./SuccessServlet").forward(request, response);
-	
-				break;
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			request.getRequestDispatcher("./FailureServlet").forward(request, response);
-		}
+		doGet(request, response);
 	}
 
 }

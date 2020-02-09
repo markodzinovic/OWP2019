@@ -1,4 +1,13 @@
 $(document).ready(function() {
+	$('#odjava').on('click', function() {
+		$.get('LogoutServlet', function(data) {
+			if(data.status == 'unauthenticated'){
+				window.location.replace('Login.html');
+				return;
+			}
+		})
+		
+	})
 	
 	var idProjekcije = window.location.search.slice(1).split('&')[0].split('=')[1];
 	console.log(idProjekcije);
@@ -13,15 +22,24 @@ $(document).ready(function() {
 	var kupiKartu = $('#kupiKartuP');
 	var adminBrisanje = $('#adminBrisanje');
 	
+	kupiKartu.hide();
+	adminBrisanje.hide();
+	
 	param = {
 			'idProjekcije' : idProjekcije
 	}
 	
 	$.get('PojedinacnaProjekcijaServlet',param, function(data) {
 		
-		console.log(data);
+		console.log(data.status);
+		
+		if(data.status == 'unauthenticated'){
+			window.location.replace('Login.html');
+			return;
+		}
 		
 		if(data.status == 'success'){
+			console.log(data.uloga);
 			
 			console.log(data.projekcija);
 			
@@ -34,29 +52,43 @@ $(document).ready(function() {
 			cenaP.val(projekcija.cena);
 			slobodnaSedistaP.val(10);
 			
+			if(data.uloga == 'KORISNIK'){
+				kupiKartu.show();
+				adminBrisanje.hide();
+				kupiKartu.on('click', function() {
+					window.location.replace('KupovinaKarte.html?id='+idProjekcije);
+				})
+				return;
+			}
+			if(data.uloga == 'ADMIN'){
+				kupiKartu.hide();
+				adminBrisanje.show();
+				admin();
+				return;
+			}
 		}
 	})
 	
-	adminBrisanje.on('click', function() {
-	
-		params = {
-				'akcija' : 'brisanje',
-				'idProjekcije' : idProjekcije
-		}
-		console.log(idProjekcije);
-		$.post('PojedinacnaProjekcijaServlet', params , function(data) {
-			console.log(data);
-			if(data.status == 'failure'){
-				alert('Ne moze da se obrise');
-				return;
+	function admin() {
+		adminBrisanje.on('click', function() {
+			
+			params = {
+					'akcija' : 'brisanje',
+					'idProjekcije' : idProjekcije
 			}
-			if(data.status == 'success'){
-				window.location.replace('Glavna.html');
-				return;
-			}
+			console.log(idProjekcije);
+			$.post('PojedinacnaProjekcijaServlet', params , function(data) {
+				console.log(data);
+				if(data.status == 'failure'){
+					alert('Ne moze da se obrise');
+					return;
+				}
+				if(data.status == 'success'){
+					window.location.replace('Glavna.html');
+					return;
+				}
+			})
 		})
+	}
 		
-	})
-	
-	
 })
