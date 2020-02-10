@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import dao.FilmDAO;
 import dao.KorisnikDAO;
+import dao.ProjekcijeDAO;
 import model.Film;
 import model.Korisnik;
 
@@ -134,7 +135,14 @@ public class PojedinacniFilmServlet extends HttpServlet {
 					String idFilmaBrisanje = request.getParameter("idFilma");
 					int idBrisanje = Integer.parseInt(idFilmaBrisanje);
 					
-					FilmDAO.brisanjeFilma(idBrisanje);
+					Film fa = ProjekcijeDAO.proveraFilmaUProjekcijama(idBrisanje);
+					
+					if(fa == null) {
+						FilmDAO.brisanjeFilma(idBrisanje);
+					}else {
+						FilmDAO.logickoBrisanjeFilma(idBrisanje);
+						throw new Exception("Film ima projekcije, obrisan je samo logicki");
+					}
 					request.getRequestDispatcher("./SuccessServlet").forward(request, response);
 					break;
 		}

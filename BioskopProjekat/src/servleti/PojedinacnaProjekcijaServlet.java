@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dao.KartaDAO;
 import dao.KorisnikDAO;
 import dao.ProjekcijeDAO;
 import model.Korisnik;
@@ -70,14 +71,31 @@ public class PojedinacnaProjekcijaServlet extends HttpServlet {
 				String idProjekcije = request.getParameter("idProjekcije");
 				int id = Integer.parseInt(idProjekcije);
 				
-				ProjekcijeDAO.brisanjeProjekcije(id);
+				Projekcije pr = KartaDAO.proveraProjekcijeUKartama(id);
+				if(pr == null) {
+					ProjekcijeDAO.brisanjeProjekcije(id);
+				}else {
+					ProjekcijeDAO.logickoBrisanjeProjekcije(id);
+					throw new Exception("Projekcija ima kupljene karte, logicki obrisana");
+				}
+				
+				
 				request.getRequestDispatcher("./SuccessServlet").forward(request, response);
 	
 				break;
 			}
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			String poruka = e.getMessage();
+			if(poruka == null) {
+				poruka = "Nepredvidjena greska";
+				e.printStackTrace();	
+			}
+			
+			Map<String, Object> data = new LinkedHashMap<>();
+			
+			data.put("poruka", poruka);
+			request.setAttribute("data", data);
 			request.getRequestDispatcher("./FailureServlet").forward(request, response);
 		}
 	}

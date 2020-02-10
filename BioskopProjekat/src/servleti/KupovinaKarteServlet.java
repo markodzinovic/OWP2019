@@ -1,7 +1,12 @@
 package servleti;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,12 +44,34 @@ public class KupovinaKarteServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		
+		String ulogovan = (String) request.getSession().getAttribute("ulogovan");
+		if(ulogovan == null) {
+			request.getRequestDispatcher("./LogoutServlet").forward(request, response);
+			return;
+		}
 		try {
 			String idProjekcije = request.getParameter("idProjekcije");
 			
 			int idP = Integer.parseInt(idProjekcije);
 			Projekcije p = ProjekcijeDAO.getProjekcija(idP);
+			
+			String datumIvreme = p.getDatum();
+			String[] splitovan = datumIvreme.split(" ");
+			
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");  
+	    	LocalDate now = LocalDate.now();  
+	    	
+	    	String proslost = "";
+	    	
+	    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	    	Date date1 = sdf.parse(splitovan[0]);
+			Date date2 = sdf.parse(dtf.format(now));
+			if(date1.before(date2)) {
+				proslost = "proslost";
+				System.out.println("Datum: "+date2 +" je pre :" +date1);
+			}
+			
+			
 			
 			List<Integer> slobodnaSedista = new ArrayList<>();
 			Sedista s = SedisteDAO.brojSedista(p.getSala().getId());
@@ -65,7 +92,7 @@ public class KupovinaKarteServlet extends HttpServlet {
 			Map<String, Object> data = new LinkedHashMap<>();
 			data.put("projekcija", p);
 			data.put("ss", slobodnaSedista);
-
+			data.put("proslost", proslost);
 			
 			request.setAttribute("data", data);
 			request.getRequestDispatcher("./SuccessServlet").forward(request, response);
@@ -83,17 +110,23 @@ public class KupovinaKarteServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		String ulogovan = (String) request.getSession().getAttribute("ulogovan");
 		String idProjekcije = request.getParameter("idProjekcije");
 		String sedisteString = request.getParameter("sediste");
 		try {
 			int id = Integer.parseInt(idProjekcije);
 			int sediste = Integer.parseInt(sedisteString);
 			Projekcije p = ProjekcijeDAO.getProjekcija(id);
-			Korisnik k = KorisnikDAO.getKorisnik("c");
+			Korisnik k = KorisnikDAO.getKorisnik(ulogovan);
+			
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");  
+	    	LocalDateTime now = LocalDateTime.now();  
+	    	String datum = dtf.format(now);
+	    	System.out.println(datum);
 			
 			Karta karta = new Karta();
 			karta.setProjekcija(p);
-			karta.setDatum("15.02.2020");
+			karta.setDatum(datum);
 			karta.setSediste(sediste);
 			karta.setKorisnik(k);
 			

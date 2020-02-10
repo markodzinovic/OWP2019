@@ -10,10 +10,13 @@ $(document).ready(function() {
 	})
 	
 	var filmDP =  document.getElementById('filmDP');
-	var datumDP = $('#datumDP')
+	var datumDP = $('#datumDP');
+	var vremeDP = $('#vremeDP');
 	var salaDP =  document.getElementById('salaDP');
 	var tipDP =  document.getElementById('tipDP');
 	var cenaDP = $('#cenaDP');
+	
+	var porukaParagraf = $('#porukaParagraf');
 	
 	var dodaj = $('#dodajProjekciju');
 	
@@ -49,14 +52,22 @@ $(document).ready(function() {
 					
 					var film = filmDP.value;
 					var datum = datumDP.val();
+					var vreme = vremeDP.val();
 					var sala = salaDP.value;
 					var tipProjekcije = tipDP.value;
 					var cena = cenaDP.val();
+					
+					var utc = new Date().toJSON().slice(0,10).replace(/-/g,'-');
+					if(utc >= datum){
+						porukaParagraf.text('Izabrali ste dan u proslosti ili ne mozete izabrati danasnji dan');
+						return;
+					}
 					
 					params = {
 							'akcija' : 'dodavanje',
 							'film' : film,
 							'datum' : datum,
+							'vreme' : vreme,
 							'sala' : sala,
 							'tipProjekcije' : tipProjekcije,
 							'cena' : cena
@@ -66,7 +77,7 @@ $(document).ready(function() {
 						console.log(data);
 						
 						if(data.status == 'failure'){
-							alert(data.poruka);
+							porukaParagraf.text(data.poruka);
 							return;
 						}
 						if(data.status == 'success'){

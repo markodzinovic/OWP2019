@@ -17,7 +17,7 @@ public class KorisnikDAO {
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		try {
-			String query = "SELECT datum,uloga,obrisan FROM korisnik WHERE korisnickoIme = ? AND lozinka = ?";
+			String query = "SELECT datum,uloga,obrisan FROM korisnik WHERE korisnickoIme = ? AND lozinka = ? AND obrisan = false";
 
 			pstmt = conn.prepareStatement(query);
 			int index = 1;
@@ -51,7 +51,7 @@ public class KorisnikDAO {
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		try {
-			String query = "SELECT * FROM korisnik";
+			String query = "SELECT * FROM korisnik WHERE obrisan = false";
 
 			pstmt = conn.prepareStatement(query);
 
@@ -161,6 +161,33 @@ public class KorisnikDAO {
 		}
 	}
 	
+	public static boolean izmenaProfila(Korisnik korisnik, String korisnickoIme) throws Exception {
+		
+		Connection conn = ConnectionManager.getConnection();
+		
+		PreparedStatement pstmt = null;
+		
+		try {
+			String upit = "UPDATE korisnik SET korisnickoIme=?,lozinka=?,datum=?,uloga=?,obrisan=? WHERE korisnickoIme = ?";
+			
+			pstmt = conn.prepareStatement(upit);
+			
+			int index = 1;
+			pstmt.setString(index++, korisnik.getKorisnickoIme());
+			pstmt.setString(index++, korisnik.getLozinka());
+			pstmt.setString(index++, korisnik.getDatumRegistracije());
+			pstmt.setString(index++, korisnik.getUloga().toString());
+			pstmt.setBoolean(index++, korisnik.isObrisan());
+			pstmt.setString(index++, korisnickoIme);
+			
+			return pstmt.executeUpdate() == 1;
+			
+		} finally {
+			try {pstmt.close();} catch (Exception ex1) {ex1.printStackTrace();}
+			try {conn.close();} catch (Exception ex1) {ex1.printStackTrace();}
+		}
+	}
+	
 	public static boolean brisanjeKorisnika(String korisnickoIme) throws Exception{
 		
 		Connection conn = ConnectionManager.getConnection();
@@ -173,6 +200,31 @@ public class KorisnikDAO {
 			pstmt = conn.prepareStatement(upit);
 			
 			pstmt.setString(1, korisnickoIme);
+			
+			System.out.println(pstmt);
+			
+			return pstmt.executeUpdate() == 1;
+			
+		} finally {
+			try {pstmt.close();} catch (Exception e) {e.printStackTrace();}
+			try {conn.close();} catch (Exception e) {e.printStackTrace();}
+		}
+		
+	}
+	
+public static boolean logickoBrisanjeKorisnika(String korisnickoIme) throws Exception{
+		
+		Connection conn = ConnectionManager.getConnection();
+		
+		PreparedStatement pstmt = null;
+		
+		try {
+			String upit = "UPDATE korisnik SET obrisan = true WHERE korisnickoIme = ?";
+			
+			pstmt = conn.prepareStatement(upit);
+			
+			int index = 1;
+			pstmt.setString(index++, korisnickoIme);
 			
 			System.out.println(pstmt);
 			

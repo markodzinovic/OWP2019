@@ -58,6 +58,11 @@ $(document).ready(function() {
 					
 					console.log(data.uloga);
 					
+					if(f.obrisan == true){
+						adminKontrola.hide();
+						return;
+					}
+					
 					nazivFilma.attr("disabled", false);
 					reziserFilm.attr("disabled", false);
 					glumciFilm.attr("disabled", false);
@@ -67,7 +72,7 @@ $(document).ready(function() {
 					zemljaFilm.attr("disabled", false);
 					godinaFilm.attr("disabled", false);
 					opisFilm.attr("disabled", false);
-					
+
 					adminKontrola.show();
 					adminFilm();
 					return;
@@ -122,7 +127,24 @@ $(document).ready(function() {
 			}
 			$.post('PojedinacniFilmServlet', params, function(data) {
 			console.log(data);
-							
+		
+			if(data.status == 'failure'){
+				porukaParagraf.text(data.poruka);
+				
+				nazivFilma.attr("disabled", true);
+				reziserFilm.attr("disabled", true);
+				glumciFilm.attr("disabled", true);
+				zanroviFilm.attr("disabled", true);
+				trajanjeFilm.attr("disabled", true);
+				distributerFilm.attr("disabled", true);
+				zemljaFilm.attr("disabled", true);
+				godinaFilm.attr("disabled", true);
+				opisFilm.attr("disabled", true);
+				
+				adminKontrola.hide();
+				
+				return;
+			}
 			if(data.status == 'success'){
 				window.location.replace('Filmovi.html')
 					return;

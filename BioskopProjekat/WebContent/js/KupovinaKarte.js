@@ -1,4 +1,13 @@
 $(document).ready(function() {
+	$('#odjava').on('click', function() {
+		$.get('LogoutServlet', function(data) {
+			if(data.status == 'unauthenticated'){
+				window.location.replace('Login.html');
+				return;
+			}
+		})
+		
+	})
 	
 	var idProjekcije = window.location.search.slice(1).split('&')[0].split('=')[1];
 	console.log(idProjekcije);
@@ -15,9 +24,22 @@ $(document).ready(function() {
 	}
 	
 	$.get('KupovinaKarteServlet',param, function(data) {
-		console.log(data)
-		console.log(data.ss)
+
+		if(data.status == 'unauthenticated'){
+			window.location.replace('Login.html');
+			return;
+		}
+		
 		if(data.status == 'success'){
+			console.log(data)
+			console.log(data.ss)
+			
+			if(data.proslost == 'proslost'){
+				$('#sedista').prop('disabled', true);
+				$('#dalje').prop('disabled', true);
+				alert("Projekcija je u proslosti, molimo vas pogledajte neku drugu projekciju");
+				return;
+			}
 			
 			var projekcija = data.projekcija;
 			
@@ -38,6 +60,8 @@ $(document).ready(function() {
 				var sediste = sedistaKK.value;
 				
 				if(sediste == ''){
+					$('#sedista').prop('disabled', true);
+					$('#dalje').prop('disabled', true);
 					alert("Projekcija je rasprodata");
 					return;
 				}
@@ -100,6 +124,3 @@ $(document).ready(function() {
 	
 	
 })
-
-//				$('#sedista').prop('disabled', true);
-//				$('#dalje').prop('disabled', true);

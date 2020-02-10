@@ -1,7 +1,10 @@
 package servleti;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -9,7 +12,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dao.ConnectionManager;
+import dao.KartaDAO;
 import dao.KorisnikDAO;
+import model.Karta;
 import model.Korisnik;
 import model.Korisnik.Uloga;
 
@@ -78,6 +84,11 @@ public class PojedinacniKorisnikServlet extends HttpServlet {
 			switch (akcija) {
 			case "izmena":
 				String korisnickoIme = request.getParameter("korisnickoIme");
+				
+				Korisnik k1 = KorisnikDAO.getKorisnik(ulogovan);
+				if(k1.getKorisnickoIme().equals(korisnickoIme)) {
+					throw new Exception("Ne mozete sebi menjati ulogu");
+				}
 
 				Korisnik kI = KorisnikDAO.getKorisnik(korisnickoIme);
 					
@@ -97,9 +108,16 @@ public class PojedinacniKorisnikServlet extends HttpServlet {
 				if(k.getKorisnickoIme().equals(korisnickoImeBrisanje)) {
 					throw new Exception("Ne mozete obrisati sebe");
 				}
+				List<Karta> sveKorisnickeKarte = KartaDAO.karteJednogKorisnika(korisnickoImeBrisanje);
+				System.out.println(sveKorisnickeKarte);
+				if(!sveKorisnickeKarte.isEmpty()) {
+					KorisnikDAO.logickoBrisanjeKorisnika(korisnickoImeBrisanje);
+					throw new Exception("Korisnik ima karte, brisanje je samo logicko");
+				}
+				if(sveKorisnickeKarte.isEmpty()) {
+					KorisnikDAO.brisanjeKorisnika(korisnickoImeBrisanje);
+				}
 
-				KorisnikDAO.brisanjeKorisnika(korisnickoImeBrisanje);
-					
 				request.getRequestDispatcher("./SuccessServlet").forward(request, response);	
 				break;
 			}
@@ -114,10 +132,7 @@ public class PojedinacniKorisnikServlet extends HttpServlet {
 			data.put("poruka", poruka);
 			
 			request.setAttribute("data", data);
-			request.getRequestDispatcher("./FailureServlet").forward(request, response);
-			
+			request.getRequestDispatcher("./FailureServlet").forward(request, response);	
 		}
-
 	}
-
 }

@@ -17,12 +17,14 @@ $(document).ready(function() {
 	var tipP = $('#tipP');
 	var salaP = $('#salaP');
 	var cenaP = $('#cenaP');
-	var slobodnaSedistaP = $('#sedistaP')
+	var slobodnaSedistaP = $('#sedistaP');
+	
+	var porukaParagraf = $('#porukaParagraf');
 	
 	var kupiKartu = $('#kupiKartuP');
 	var adminBrisanje = $('#adminBrisanje');
 	
-	kupiKartu.hide();
+
 	adminBrisanje.hide();
 	
 	param = {
@@ -51,17 +53,19 @@ $(document).ready(function() {
 			salaP.val(projekcija.sala.naziv);
 			cenaP.val(projekcija.cena);
 			slobodnaSedistaP.val(10);
-			
-			if(data.uloga == 'KORISNIK'){
-				kupiKartu.show();
+
+			if(projekcija.obrisan == true){
+				kupiKartu.hide();
 				adminBrisanje.hide();
-				kupiKartu.on('click', function() {
-					window.location.replace('KupovinaKarte.html?id='+idProjekcije);
-				})
 				return;
 			}
+			
+			kupiKartu.on('click', function() {
+				window.location.replace('KupovinaKarte.html?id='+idProjekcije);
+			})
+
 			if(data.uloga == 'ADMIN'){
-				kupiKartu.hide();
+
 				adminBrisanje.show();
 				admin();
 				return;
@@ -80,7 +84,9 @@ $(document).ready(function() {
 			$.post('PojedinacnaProjekcijaServlet', params , function(data) {
 				console.log(data);
 				if(data.status == 'failure'){
-					alert('Ne moze da se obrise');
+					porukaParagraf.text(data.poruka);
+					adminBrisanje.hide();
+					kupiKartu.hide();
 					return;
 				}
 				if(data.status == 'success'){

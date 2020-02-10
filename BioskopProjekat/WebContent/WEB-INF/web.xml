@@ -187,4 +187,14 @@
     <servlet-name>PojedinacnaKartaServlet</servlet-name>
     <url-pattern>/PojedinacnaKartaServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ProfilServlet</display-name>
+    <servlet-name>ProfilServlet</servlet-name>
+    <servlet-class>servleti.ProfilServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ProfilServlet</servlet-name>
+    <url-pattern>/ProfilServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

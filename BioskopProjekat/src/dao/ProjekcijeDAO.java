@@ -69,7 +69,7 @@ public class ProjekcijeDAO {
 		ResultSet rset = null;
 		
 		try {
-			String upit = "SELECT id,nazivFilma,tipProjekcije,sala,datum,cena,admin,obrisan FROM projekcije";
+			String upit = "SELECT id,nazivFilma,tipProjekcije,sala,datum,cena,admin,obrisan FROM projekcije WHERE obrisan = false";
 			
 			pstmt = conn.prepareStatement(upit);
 			
@@ -157,6 +157,56 @@ public class ProjekcijeDAO {
 			try {pstmt.close();} catch (Exception e1) {e1.printStackTrace();}
 			try {conn.close();} catch (Exception e1) {e1.printStackTrace();}
 		}
+	}
+	public static boolean logickoBrisanjeProjekcije(int id) throws Exception {
+		
+		Connection conn = ConnectionManager.getConnection();
+		
+		PreparedStatement pstmt = null; 
+		try {
+			String upit = "UPDATE projekcije SET obrisan = true WHERE id = ?";
+			
+			pstmt = conn.prepareStatement(upit);
+			
+			pstmt.setInt(1, id);
+			System.out.println(pstmt);
+			return pstmt.executeUpdate() == 1;
+			
+		} finally {
+			try {pstmt.close();} catch (Exception ex1) {ex1.printStackTrace();}
+			try {conn.close();} catch (Exception ex1) {ex1.printStackTrace();}
+		}
+	}
+	
+	public static Film proveraFilmaUProjekcijama(int id) throws Exception{
+		
+		Connection conn = ConnectionManager.getConnection();
+		
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		try {
+			String upit = "SELECT nazivFilma FROM projekcije WHERE nazivFilma = ?";
+			
+			pstmt = conn.prepareStatement(upit);
+			
+			pstmt.setInt(1, id);
+			
+			rset = pstmt.executeQuery();
+			if(rset.next()) {
+				int idFilma = rset.getInt(1);
+				Film f = FilmDAO.getFilm(idFilma);
+				
+				return f;
+			}
+			
+		} finally {
+			try {pstmt.close();} catch (Exception e1) {e1.printStackTrace();}
+			try {rset.close();} catch (Exception e1) {e1.printStackTrace();}
+			try {conn.close();} catch (Exception e1) {e1.printStackTrace();}
+		}
+		
+		return null;
 	}
 
 }

@@ -47,7 +47,6 @@ $(document).ready(function() {
 			
 			
 			if(data.uloga == 'ADMIN'){
-				$('td:nth-child(6)').hide();
 				korisnik.hide();
 				admin.show();
 				return;

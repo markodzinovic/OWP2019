@@ -47,9 +47,14 @@ $(document).ready(function() {
 					var uloga = document.getElementById("ulogaB");
 					
 					uloga.value = kor.uloga;
-					
 					admin();
 					
+					if(kor.obrisan == true){
+						$('#izmenaKorisnika').hide();
+						$('#brisanjeKorisnika').hide();
+						$('#ulogaB').prop('disabled', true);
+						return;
+					}
 					return;
 				}
 				
@@ -113,6 +118,9 @@ $(document).ready(function() {
 		$.post('PojedinacniKorisnikServlet', param , function(data) {
 			
 			if(data.status == 'failure'){
+				$('#izmenaKorisnika').hide();
+				$('#brisanjeKorisnika').hide();
+				$('#ulogaB').prop('disabled', true);
 				alert(data.poruka)
 				return;
 			}

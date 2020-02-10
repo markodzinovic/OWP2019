@@ -1,6 +1,8 @@
 package servleti;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -50,7 +52,12 @@ public class RegistracijaServlet extends HttpServlet {
 			if ("".equals(lozinka))
 				throw new Exception("Lozinka je prazna!");
 			
-			Korisnik kor = new Korisnik(korisnickoIme, lozinka, "21.01.2020", Uloga.KORISNIK, false);
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");  
+	    	LocalDateTime now = LocalDateTime.now();  
+	    	String datum = dtf.format(now);
+	    	System.out.println(datum);
+			
+			Korisnik kor = new Korisnik(korisnickoIme, lozinka, datum, Uloga.KORISNIK, false);
 			KorisnikDAO.registracija(kor);
 
 

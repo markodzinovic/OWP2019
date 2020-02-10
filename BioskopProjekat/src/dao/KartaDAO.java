@@ -126,6 +126,28 @@ public class KartaDAO {
 		
 	}
 	
+	public static boolean brisanjeKarte(int id) throws Exception{
+		
+		Connection conn = ConnectionManager.getConnection();
+		
+		PreparedStatement pstmt = null;
+		
+		try {
+			String upit = "DELETE FROM karte WHERE id = ?";
+			
+			pstmt = conn.prepareStatement(upit);
+			
+			pstmt.setInt(1, id);
+			
+			System.out.println(pstmt);
+			
+			return pstmt.executeUpdate() == 1;
+		} finally {
+			try {pstmt.close();} catch (Exception e1) {e1.printStackTrace();}
+			try {conn.close();} catch (Exception e1) {e1.printStackTrace();}
+		}
+	}
+	
 public static List<Karta> karteJednogKorisnika(String korisnik) throws Exception{
 		
 		List<Karta> sveKarte = new ArrayList<Karta>();
@@ -208,6 +230,37 @@ public static List<Karta> karteJednogKorisnika(String korisnik) throws Exception
 		} finally {
 			try {rset.close();} catch (Exception e1) {e1.printStackTrace();}
 			try {pstmt.close();} catch (Exception e1) {e1.printStackTrace();}
+			try {conn.close();} catch (Exception e1) {e1.printStackTrace();}
+		}
+		
+		return null;
+	}
+	
+public static Projekcije proveraProjekcijeUKartama(int id) throws Exception{
+		
+		Connection conn = ConnectionManager.getConnection();
+		
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		try {
+			String upit = "SELECT projekcija FROM karte WHERE projekcija = ?";
+			
+			pstmt = conn.prepareStatement(upit);
+			
+			pstmt.setInt(1, id);
+			
+			rset = pstmt.executeQuery();
+			if(rset.next()) {
+				int idProjekcije = rset.getInt(1);
+				Projekcije p = ProjekcijeDAO.getProjekcija(idProjekcije);
+				
+				return p;
+			}
+			
+		} finally {
+			try {pstmt.close();} catch (Exception e1) {e1.printStackTrace();}
+			try {rset.close();} catch (Exception e1) {e1.printStackTrace();}
 			try {conn.close();} catch (Exception e1) {e1.printStackTrace();}
 		}
 		

@@ -51,10 +51,33 @@ $(document).ready(function() {
 			 
 			 if(data.uloga == 'ADMIN'){
 				 adminKontrola.show();
+				 adminBrisanjeKarte();
 				 return;
 			 }
 			
 		}
 	})
+	
+	function adminBrisanjeKarte() {
+		$('#obrisiKartu').on('click', function() {
+			
+			param = {
+					'idKarte' : idKarte
+			}
+			
+			$.post('PojedinacnaKartaServlet', param, function(data) {
+				console.log(data);
+				
+				if(data.status == 'failure'){
+					porukaParagraf.text(data.poruka);
+					return;
+				}
+				if(data.status == 'success'){
+					window.location.replace('Karte.html');
+					return;
+				}
+			})
+		})
+	}
 	
 })
