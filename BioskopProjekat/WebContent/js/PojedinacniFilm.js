@@ -23,8 +23,10 @@ $(document).ready(function() {
 	
 	var porukaParagraf = $('#porukaParagraf');
 	var adminKontrola = $('#admin');
+	var adminTabela = $('#projekcijaTabelaFilm')
 	
 	adminKontrola.hide();
+	adminTabela.hide();
 	
 	function korisnikFilm() {
 		
@@ -53,6 +55,10 @@ $(document).ready(function() {
 				zemljaFilm.val(f.zemljaPorekla);
 				godinaFilm.val(f.godinaProizvodnje);
 				opisFilm.val(f.opis);
+				
+				adminTabela.show();
+				var projekcije = data.sveProjekcijeZaFilm;
+				tabelaProjekcijaZaFilm(adminTabela,projekcije);
 				
 				if(data.uloga == 'ADMIN'){
 					
@@ -151,6 +157,19 @@ $(document).ready(function() {
 				}	
 			})
 		})	
+	}
+	function tabelaProjekcijaZaFilm(tabelaProjekcije,l1) {
+		
+		for ( i in l1) {
+			tabelaProjekcije.append('<tr>'+
+					'<td><a href="PojedinacniFilm.html?id='+ l1[i].nazivFilma.id +'">' + l1[i].nazivFilma.naziv + '</td>'+
+					'<td><a href="PojedinacnaProjekcija.html?id='+ l1[i].id +'">' + l1[i].datum + '</td>' +
+					'<td>' + l1[i].tipProjekcije.naziv + '</td>' +
+					'<td>' + l1[i].sala.naziv + '</td>' +
+					'<td>' + l1[i].cena + 'e'  + '</td>' +
+					'<td><a  href="KupovinaKarte.html?id='+l1[i].id+'">Kupi kartu</a></td>' +
+			'</tr>')
+		}
 	}
 	
 	korisnikFilm()

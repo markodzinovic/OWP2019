@@ -40,6 +40,12 @@ $(document).ready(function() {
 				alert("Projekcija je u proslosti, molimo vas pogledajte neku drugu projekciju");
 				return;
 			}
+			if(data.ss == 0){
+				$('#sedista').prop('disabled', true);
+				$('#dalje').prop('disabled', true);
+				alert("Projekcija je rasprodata");
+				return;
+			}
 			
 			var projekcija = data.projekcija;
 			
@@ -58,13 +64,6 @@ $(document).ready(function() {
 			odabraoSedista.on('click', function() {
 				
 				var sediste = sedistaKK.value;
-				
-				if(sediste == ''){
-					$('#sedista').prop('disabled', true);
-					$('#dalje').prop('disabled', true);
-					alert("Projekcija je rasprodata");
-					return;
-				}
 				
 				$('#sedista').prop('disabled', true);
 				$('#dalje').prop('disabled', true);

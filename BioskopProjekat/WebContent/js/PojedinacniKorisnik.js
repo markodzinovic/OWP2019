@@ -16,6 +16,7 @@ $(document).ready(function() {
 		
 		var korisni = $('#korisnickoImeP');
 		var datum = $('#datumP');
+		var tabelaKartiZaKorisnika = $('#tabelaKartiZaKorisnika');
 		
 		var param = {
 			'korisnickoIme' : korisnickoImeGore
@@ -39,15 +40,14 @@ $(document).ready(function() {
 				if(data.uloga == 'ADMIN'){
 					
 					var kor = data.korisnik;
-					
 					korisni.val(kor.korisnickoIme);
 					datum.val(kor.datumRegistracije);
 					console.log(kor.uloga)
+					console.log(data.sveKorisnickeKarte);
+					var karteK = data.sveKorisnickeKarte;
 					
 					var uloga = document.getElementById("ulogaB");
-					
 					uloga.value = kor.uloga;
-					admin();
 					
 					if(kor.obrisan == true){
 						$('#izmenaKorisnika').hide();
@@ -55,6 +55,11 @@ $(document).ready(function() {
 						$('#ulogaB').prop('disabled', true);
 						return;
 					}
+					if(karteK == 0){
+						tabelaKartiZaKorisnika.hide();
+					}
+					admin();
+					karteOdKorisnika(tabelaKartiZaKorisnika,karteK)
 					return;
 				}
 				
@@ -94,6 +99,9 @@ $(document).ready(function() {
 			$.post('PojedinacniKorisnikServlet', params, function(data) {
 				
 				if(data.status == 'failure'){
+					$('#izmenaKorisnika').hide();
+					$('#brisanjeKorisnika').hide();
+					$('#ulogaB').prop('disabled', true);
 					alert(data.poruka);
 					return;
 				}
@@ -133,6 +141,22 @@ $(document).ready(function() {
 		
 	} )
 		
+	}
+	
+	function karteOdKorisnika(tabelaKarti,l1) {
+		
+		for ( k in l1) {
+			tabelaKarti.append('<tr>'+
+					'<td><a href="PojedinacniFilm.html?id='+l1[k].projekcija.nazivFilma.id+'" >' + l1[k].projekcija.nazivFilma.naziv + '</td>' + 
+					'<td><a href="PojedinacnaProjekcija.html?id='+l1[k].projekcija.id+'" >' + l1[k].projekcija.datum + '</td>' +
+					'<td><a href="PojedinacnaKarta.html?id='+l1[k].id+'" >' + l1[k].datum + '</td>' +
+					'<td>' + l1[k].projekcija.tipProjekcije.naziv + '</td>' +
+					'<td>' + l1[k].projekcija.sala.naziv + '</td>' +
+					'<td>' + l1[k].sediste + '</td>' +
+					'<td>' + l1[k].projekcija.cena + 'e'+ '</td>' +
+					'<td><a href="PojedinacniKorisnik.html?id='+l1[k].korisnik.korisnickoIme+'" >' + l1[k].korisnik.korisnickoIme + '</td>' +
+			'</tr>')
+		}
 	}
 
 	jedanKorisnik();

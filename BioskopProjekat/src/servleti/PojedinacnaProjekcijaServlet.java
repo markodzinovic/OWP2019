@@ -2,6 +2,7 @@ package servleti;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -12,8 +13,11 @@ import javax.servlet.http.HttpServletResponse;
 import dao.KartaDAO;
 import dao.KorisnikDAO;
 import dao.ProjekcijeDAO;
+import dao.SedisteDAO;
+import model.Karta;
 import model.Korisnik;
 import model.Projekcije;
+import model.Sedista;
 
 /**
  * Servlet implementation class PojedinacnaProjekcijaServlet
@@ -46,9 +50,16 @@ public class PojedinacnaProjekcijaServlet extends HttpServlet {
 			int id = Integer.parseInt(idProjekcije);
 			
 			Projekcije p = ProjekcijeDAO.getProjekcija(id);
+			List<Karta> sveKarteZaProjekciju = KartaDAO.proveraProjekcijeUKartama(id);
+			
+			Sedista sed = SedisteDAO.brojSedista(p.getSala().getId());
+			int slobodnaSedista = sed.getRedniBroj() - sveKarteZaProjekciju.size();
+			
 			Map<String, Object> data = new LinkedHashMap<>();
 			data.put("uloga", uloga.getUloga().toString());
 			data.put("projekcija", p);
+			data.put("sveKarteZaProjekciju", sveKarteZaProjekciju);
+			data.put("slobodnaSedista", slobodnaSedista);
 			
 			request.setAttribute("data", data);
 			request.getRequestDispatcher("./SuccessServlet").forward(request, response);
@@ -71,8 +82,8 @@ public class PojedinacnaProjekcijaServlet extends HttpServlet {
 				String idProjekcije = request.getParameter("idProjekcije");
 				int id = Integer.parseInt(idProjekcije);
 				
-				Projekcije pr = KartaDAO.proveraProjekcijeUKartama(id);
-				if(pr == null) {
+				List<Karta> pr = KartaDAO.proveraProjekcijeUKartama(id);
+				if(pr.isEmpty()) {
 					ProjekcijeDAO.brisanjeProjekcije(id);
 				}else {
 					ProjekcijeDAO.logickoBrisanjeProjekcije(id);

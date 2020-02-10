@@ -1,6 +1,8 @@
 package servleti;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +45,10 @@ public class GlavnaServlet extends HttpServlet {
 		try {
 			Korisnik uloga = KorisnikDAO.getKorisnik(ulogovan);
 			
-			List<Projekcije> sveProjekcije = ProjekcijeDAO.getAll();
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");  
+        	LocalDate now = LocalDate.now();
+        	System.out.println(dtf.format(now));
+        	List<Projekcije> sveProjekcije = ProjekcijeDAO.getDanasnjeProjekcije(dtf.format(now));
 			
 			Map<String, Object> data = new LinkedHashMap<>();
 			data.put("uloga", uloga.getUloga().toString());

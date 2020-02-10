@@ -1,8 +1,6 @@
 package servleti;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import dao.ConnectionManager;
 import dao.KartaDAO;
 import dao.KorisnikDAO;
 import model.Karta;
@@ -48,14 +45,14 @@ public class PojedinacniKorisnikServlet extends HttpServlet {
 		try {
 			Korisnik uloga = KorisnikDAO.getKorisnik(ulogovan);
 			
-			String korisnickoIme = request.getParameter("korisnickoIme");
-			System.out.println("Ovo je korisnicko ime: " + korisnickoIme );
-			
+			String korisnickoIme = request.getParameter("korisnickoIme");	
 			Korisnik korisnik = KorisnikDAO.getKorisnik(korisnickoIme);
-			System.out.println(korisnik.getDatumRegistracije());
+			
+			List<Karta> sveKorisnickeKarte = KartaDAO.karteJednogKorisnika(korisnik.getKorisnickoIme());
 			
 			Map<String, Object> data = new LinkedHashMap<>();
 			data.put("korisnik", korisnik);
+			data.put("sveKorisnickeKarte", sveKorisnickeKarte);
 			data.put("uloga", uloga.getUloga().toString());
 			
 			request.setAttribute("data", data);

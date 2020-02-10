@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dao.KorisnikDAO;
-import jdk.nashorn.internal.ir.RuntimeNode.Request;
 import model.Korisnik;
 
 /**

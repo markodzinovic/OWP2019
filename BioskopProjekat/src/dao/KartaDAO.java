@@ -236,26 +236,37 @@ public static List<Karta> karteJednogKorisnika(String korisnik) throws Exception
 		return null;
 	}
 	
-public static Projekcije proveraProjekcijeUKartama(int id) throws Exception{
+public static List<Karta> proveraProjekcijeUKartama(int id) throws Exception{
 		
+		List<Karta> projekcije = new ArrayList<>();
+	
 		Connection conn = ConnectionManager.getConnection();
 		
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
 		try {
-			String upit = "SELECT projekcija FROM karte WHERE projekcija = ?";
+			String upit = "SELECT * FROM karte WHERE projekcija = ?";
 			
 			pstmt = conn.prepareStatement(upit);
 			
 			pstmt.setInt(1, id);
 			
 			rset = pstmt.executeQuery();
-			if(rset.next()) {
-				int idProjekcije = rset.getInt(1);
-				Projekcije p = ProjekcijeDAO.getProjekcija(idProjekcije);
+			while(rset.next()) {
+				int index = 1;
+				int idKarte = rset.getInt(index++);
+				int idProjekcije = rset.getInt(index++);
+				int sediste = rset.getInt(index++);
+				String datum = rset.getString(index++);
+				String korisnickoIme = rset.getString(index++);
 				
-				return p;
+				Projekcije p = ProjekcijeDAO.getProjekcija(idProjekcije);
+				Korisnik k = KorisnikDAO.getKorisnik(korisnickoIme);
+				
+				Karta karta = new Karta(idKarte, p, sediste, datum, k);
+				
+				projekcije.add(karta);
 			}
 			
 		} finally {
@@ -264,7 +275,7 @@ public static Projekcije proveraProjekcijeUKartama(int id) throws Exception{
 			try {conn.close();} catch (Exception e1) {e1.printStackTrace();}
 		}
 		
-		return null;
+		return projekcije;
 	}
 	
 }

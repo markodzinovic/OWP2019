@@ -1,6 +1,8 @@
 package servleti;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,10 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dao.FilmDAO;
-import dao.KorisnikDAO;
 import dao.ProjekcijeDAO;
 import model.Film;
-import model.Korisnik;
 import model.Projekcije;
 
 /**
@@ -38,7 +38,11 @@ public class PocetnaStranicaServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		try {
 
-			List<Projekcije> sveProjekcije = ProjekcijeDAO.getAll();
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");  
+        	LocalDate now = LocalDate.now();
+        	System.out.println(dtf.format(now));
+        	List<Projekcije> sveProjekcije = ProjekcijeDAO.getDanasnjeProjekcije(dtf.format(now));
+        	
 			List<Film> sviFilmovi = FilmDAO.getAll();
 			
 			Map<String, Object> data = new LinkedHashMap<>();

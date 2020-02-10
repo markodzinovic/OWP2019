@@ -62,7 +62,7 @@ public class ProjekcijeDAO {
 	
 	public static List<Projekcije> getAll() throws Exception {
 		List<Projekcije> sveProjekcije = new ArrayList<>();
-		
+
 		Connection conn = ConnectionManager.getConnection();
 		
 		PreparedStatement pstmt = null;
@@ -94,6 +94,8 @@ public class ProjekcijeDAO {
 				
 				Projekcije p = new Projekcije(idProjekcije, naziv, tip, sala, datum, cena, admin, obrisan);
 				sveProjekcije.add(p);
+				
+				System.out.println(sveProjekcije);
 				
 			}
 			
@@ -178,7 +180,8 @@ public class ProjekcijeDAO {
 		}
 	}
 	
-	public static Film proveraFilmaUProjekcijama(int id) throws Exception{
+	public static List<Projekcije> getDanasnjeProjekcije(String danasnjiDatum) throws Exception {
+		List<Projekcije> sveProjekcije = new ArrayList<>();
 		
 		Connection conn = ConnectionManager.getConnection();
 		
@@ -186,18 +189,79 @@ public class ProjekcijeDAO {
 		ResultSet rset = null;
 		
 		try {
-			String upit = "SELECT nazivFilma FROM projekcije WHERE nazivFilma = ?";
+			String upit = "SELECT id,nazivFilma,tipProjekcije,sala,datum,cena,admin,obrisan FROM projekcije WHERE obrisan = false AND datum LIKE '%"+ danasnjiDatum+"%'";
+			
+			pstmt = conn.prepareStatement(upit);
+			
+			System.out.println(pstmt);
+			
+			rset = pstmt.executeQuery();
+			while (rset.next()) {
+				int index = 1;
+				int idProjekcije = rset.getInt(index++);
+				int idFilma = rset.getInt(index++);
+				int idTipaProjekcije = rset.getInt(index++);
+				int idSale = rset.getInt(index++);
+				String datum = rset.getString(index++);
+				double cena = rset.getDouble(index++);
+				String korisnickoImeAdmina = rset.getString(index++);
+				boolean obrisan = rset.getBoolean(index++);
+				
+				Film naziv = FilmDAO.getFilm(idFilma);
+				TipoviProjekcije tip = TipoviProjekcijaDAO.getTip(idTipaProjekcije);
+				Sala sala = SalaDao.getSala(idSale);
+				Korisnik admin = KorisnikDAO.getKorisnik(korisnickoImeAdmina);
+				
+				Projekcije p = new Projekcije(idProjekcije, naziv, tip, sala, datum, cena, admin, obrisan);
+				sveProjekcije.add(p);				
+			}
+			
+		} finally {
+			try {pstmt.close();} catch (Exception e1){e1.printStackTrace();}
+			try {rset.close();} catch (Exception e1){e1.printStackTrace();}
+			try {conn.close();} catch (Exception e1){e1.printStackTrace();}
+		}
+		
+		return sveProjekcije;
+	}
+	
+	
+	public static List<Projekcije> proveraFilmaUProjekcijama(int id) throws Exception{
+		
+		List<Projekcije> filmovi = new ArrayList<>();
+		
+		Connection conn = ConnectionManager.getConnection();
+		
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		
+		try {
+			String upit = "SELECT * FROM projekcije WHERE nazivFilma = ?";
 			
 			pstmt = conn.prepareStatement(upit);
 			
 			pstmt.setInt(1, id);
 			
 			rset = pstmt.executeQuery();
-			if(rset.next()) {
-				int idFilma = rset.getInt(1);
-				Film f = FilmDAO.getFilm(idFilma);
+			while(rset.next()) {
+				int index = 1;
+				int idProjekcije = rset.getInt(index++);
+				int idFilma = rset.getInt(index++);
+				int idTipaProjekcije = rset.getInt(index++);
+				int idSale = rset.getInt(index++);
+				String datum = rset.getString(index++);
+				double cena = rset.getDouble(index++);
+				String korisnickoImeAdmina = rset.getString(index++);
+				boolean obrisan = rset.getBoolean(index++);
 				
-				return f;
+				Film naziv = FilmDAO.getFilm(idFilma);
+				TipoviProjekcije tip = TipoviProjekcijaDAO.getTip(idTipaProjekcije);
+				Sala sala = SalaDao.getSala(idSale);
+				Korisnik admin = KorisnikDAO.getKorisnik(korisnickoImeAdmina);
+				
+				Projekcije p = new Projekcije(idProjekcije, naziv, tip, sala, datum, cena, admin, obrisan);
+				
+				filmovi.add(p);
 			}
 			
 		} finally {
@@ -206,7 +270,7 @@ public class ProjekcijeDAO {
 			try {conn.close();} catch (Exception e1) {e1.printStackTrace();}
 		}
 		
-		return null;
+		return filmovi;
 	}
 
 }

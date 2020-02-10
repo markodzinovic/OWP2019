@@ -60,7 +60,7 @@ public class KupovinaKarteServlet extends HttpServlet {
 			
 			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");  
 	    	LocalDate now = LocalDate.now();  
-	    	
+   	
 	    	String proslost = "";
 	    	
 	    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -70,9 +70,7 @@ public class KupovinaKarteServlet extends HttpServlet {
 				proslost = "proslost";
 				System.out.println("Datum: "+date2 +" je pre :" +date1);
 			}
-			
-			
-			
+	
 			List<Integer> slobodnaSedista = new ArrayList<>();
 			Sedista s = SedisteDAO.brojSedista(p.getSala().getId());
 			List<Karta> zauzetaSedista = KartaDAO.zauzetaSedistaZaProjekciju(p.getId());

@@ -2,6 +2,7 @@ package servleti;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -14,6 +15,7 @@ import dao.KorisnikDAO;
 import dao.ProjekcijeDAO;
 import model.Film;
 import model.Korisnik;
+import model.Projekcije;
 
 /**
  * Servlet implementation class PojedinacniFilmServlet
@@ -45,11 +47,13 @@ public class PojedinacniFilmServlet extends HttpServlet {
 
 			String idFilma = request.getParameter("idFilma");
 			int id = Integer.parseInt(idFilma);
-
-			
+						
 			Film film = FilmDAO.getFilm(id);
+			List<Projekcije> sveProjekcijeZaFilm = ProjekcijeDAO.proveraFilmaUProjekcijama(id);
+			
 			Map<String, Object> data = new LinkedHashMap<>();
 			data.put("film", film);
+			data.put("sveProjekcijeZaFilm", sveProjekcijeZaFilm);
 			data.put("uloga", uloga.getUloga().toString());
 			
 			request.setAttribute("data", data);
@@ -135,9 +139,9 @@ public class PojedinacniFilmServlet extends HttpServlet {
 					String idFilmaBrisanje = request.getParameter("idFilma");
 					int idBrisanje = Integer.parseInt(idFilmaBrisanje);
 					
-					Film fa = ProjekcijeDAO.proveraFilmaUProjekcijama(idBrisanje);
+					List<Projekcije> fa = ProjekcijeDAO.proveraFilmaUProjekcijama(idBrisanje);
 					
-					if(fa == null) {
+					if(fa.isEmpty()) {
 						FilmDAO.brisanjeFilma(idBrisanje);
 					}else {
 						FilmDAO.logickoBrisanjeFilma(idBrisanje);

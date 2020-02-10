@@ -23,9 +23,11 @@ $(document).ready(function() {
 	
 	var kupiKartu = $('#kupiKartuP');
 	var adminBrisanje = $('#adminBrisanje');
+	var tabelaKartiZaProjekciju = $('#tabelaKartiZaProjekciju');
 	
-
 	adminBrisanje.hide();
+	tabelaKartiZaProjekciju.hide();
+	$('#naslov').hide();
 	
 	param = {
 			'idProjekcije' : idProjekcije
@@ -52,7 +54,11 @@ $(document).ready(function() {
 			tipP.val(projekcija.tipProjekcije.naziv);
 			salaP.val(projekcija.sala.naziv);
 			cenaP.val(projekcija.cena);
-			slobodnaSedistaP.val(10);
+			slobodnaSedistaP.val(data.slobodnaSedista);
+			
+			if(slobodnaSedistaP.val() == 0){
+				kupiKartu.hide();
+			}
 
 			if(projekcija.obrisan == true){
 				kupiKartu.hide();
@@ -65,9 +71,14 @@ $(document).ready(function() {
 			})
 
 			if(data.uloga == 'ADMIN'){
-
+				console.log(data.sveKarteZaProjekciju);
+				var karte = data.sveKarteZaProjekciju;
+				
 				adminBrisanje.show();
+				$('#naslov').show();
+				tabelaKartiZaProjekciju.show();
 				admin();
+				karteZaProjek(tabelaKartiZaProjekciju,karte);
 				return;
 			}
 		}
@@ -95,6 +106,22 @@ $(document).ready(function() {
 				}
 			})
 		})
+	}
+	
+	function karteZaProjek(tabelaKarti,l1) {
+		
+		for ( k in l1) {
+			tabelaKarti.append('<tr>'+
+					'<td><a href="PojedinacniFilm.html?id='+l1[k].projekcija.nazivFilma.id+'" >' + l1[k].projekcija.nazivFilma.naziv + '</td>' + 
+					'<td><a href="PojedinacnaProjekcija.html?id='+l1[k].projekcija.id+'" >' + l1[k].projekcija.datum + '</td>' +
+					'<td><a href="PojedinacnaKarta.html?id='+l1[k].id+'" >' + l1[k].datum + '</td>' +
+					'<td>' + l1[k].projekcija.tipProjekcije.naziv + '</td>' +
+					'<td>' + l1[k].projekcija.sala.naziv + '</td>' +
+					'<td>' + l1[k].sediste + '</td>' +
+					'<td>' + l1[k].projekcija.cena + 'e'+ '</td>' +
+					'<td><a href="PojedinacniKorisnik.html?id='+l1[k].korisnik.korisnickoIme+'" >' + l1[k].korisnik.korisnickoIme + '</td>' +
+			'</tr>')
+		}
 	}
 		
 })
