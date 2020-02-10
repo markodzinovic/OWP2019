@@ -43,7 +43,11 @@ public class PojedinacniFilmServlet extends HttpServlet {
 		}
 		
 		try {			
-			Korisnik uloga = KorisnikDAO.getKorisnik(ulogovan);
+			Korisnik uloga =KorisnikDAO.getKorisnik(ulogovan);
+			if(uloga.isObrisan() == true) {
+				request.getRequestDispatcher("./LogoutServlet").forward(request, response);
+				return;
+			}
 
 			String idFilma = request.getParameter("idFilma");
 			int id = Integer.parseInt(idFilma);

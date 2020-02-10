@@ -53,13 +53,14 @@ $(document).ready(function() {
 						$('#izmenaKorisnika').hide();
 						$('#brisanjeKorisnika').hide();
 						$('#ulogaB').prop('disabled', true);
+						karteOdKorisnika(tabelaKartiZaKorisnika,karteK);
 						return;
 					}
 					if(karteK == 0){
 						tabelaKartiZaKorisnika.hide();
-					}
+					}					
 					admin();
-					karteOdKorisnika(tabelaKartiZaKorisnika,karteK)
+					karteOdKorisnika(tabelaKartiZaKorisnika,karteK);
 					return;
 				}
 				

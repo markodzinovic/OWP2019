@@ -43,6 +43,11 @@ public class FilmoviServlet extends HttpServlet {
 		
 		try {
 			Korisnik uloga =KorisnikDAO.getKorisnik(ulogovan);
+			if(uloga.isObrisan() == true) {
+				request.getRequestDispatcher("./LogoutServlet").forward(request, response);
+				return;
+			}
+			
 			List<Film> sviFilmovi = FilmDAO.getAll();
 			
 			Map<String, Object> data = new LinkedHashMap<>();

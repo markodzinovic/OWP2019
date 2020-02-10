@@ -39,7 +39,11 @@ public class DodavanjeFilmaServlet extends HttpServlet {
 			return;
 		}
 		try {
-			Korisnik uloga = KorisnikDAO.getKorisnik(ulogovan);
+			Korisnik uloga =KorisnikDAO.getKorisnik(ulogovan);
+			if(uloga.isObrisan() == true) {
+				request.getRequestDispatcher("./LogoutServlet").forward(request, response);
+				return;
+			}
 			
 			Map<String, Object> data = new LinkedHashMap<>();
 			data.put("uloga", uloga.getUloga().toString());

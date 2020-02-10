@@ -44,7 +44,11 @@ public class PojedinacnaProjekcijaServlet extends HttpServlet {
 			return;
 		}
 		try {
-			Korisnik uloga = KorisnikDAO.getKorisnik(ulogovan);
+			Korisnik uloga =KorisnikDAO.getKorisnik(ulogovan);
+			if(uloga.isObrisan() == true) {
+				request.getRequestDispatcher("./LogoutServlet").forward(request, response);
+				return;
+			}
 			
 			String idProjekcije = request.getParameter("idProjekcije");
 			int id = Integer.parseInt(idProjekcije);

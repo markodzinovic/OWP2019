@@ -40,20 +40,24 @@ public class KarteServlet extends HttpServlet {
 			return;
 		}
 		try {
-			Korisnik k = KorisnikDAO.getKorisnik(ulogovan);
+			Korisnik uloga =KorisnikDAO.getKorisnik(ulogovan);
+			if(uloga.isObrisan() == true) {
+				request.getRequestDispatcher("./LogoutServlet").forward(request, response);
+				return;
+			}
 			
-			if(k.getUloga().toString().equals("KORISNIK")) {
-				List<Karta> sveKarte = KartaDAO.karteJednogKorisnika(k.getKorisnickoIme());
+			if(uloga.getUloga().toString().equals("KORISNIK")) {
+				List<Karta> sveKarte = KartaDAO.karteJednogKorisnika(uloga.getKorisnickoIme());
 				
 				Map<String, Object> data = new LinkedHashMap<>();
-				data.put("uloga", k.getUloga().toString());
+				data.put("uloga", uloga.getUloga().toString());
 				data.put("sveKarte", sveKarte);
 				request.setAttribute("data", data);
 			}else {
 				List<Karta> sveKarte = KartaDAO.getAll();
 				
 				Map<String, Object> data = new LinkedHashMap<>();
-				data.put("uloga", k.getUloga().toString());
+				data.put("uloga", uloga.getUloga().toString());
 				data.put("sveKarte", sveKarte);
 				request.setAttribute("data", data);
 			}

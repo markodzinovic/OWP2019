@@ -43,7 +43,11 @@ public class PojedinacniKorisnikServlet extends HttpServlet {
 		}
 		
 		try {
-			Korisnik uloga = KorisnikDAO.getKorisnik(ulogovan);
+			Korisnik uloga =KorisnikDAO.getKorisnik(ulogovan);
+			if(uloga.isObrisan() == true) {
+				request.getRequestDispatcher("./LogoutServlet").forward(request, response);
+				return;
+			}
 			
 			String korisnickoIme = request.getParameter("korisnickoIme");	
 			Korisnik korisnik = KorisnikDAO.getKorisnik(korisnickoIme);

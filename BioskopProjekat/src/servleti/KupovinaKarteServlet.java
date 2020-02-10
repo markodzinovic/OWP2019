@@ -50,6 +50,11 @@ public class KupovinaKarteServlet extends HttpServlet {
 			return;
 		}
 		try {
+			Korisnik uloga =KorisnikDAO.getKorisnik(ulogovan);
+			if(uloga.isObrisan() == true) {
+				request.getRequestDispatcher("./LogoutServlet").forward(request, response);
+				return;
+			}
 			String idProjekcije = request.getParameter("idProjekcije");
 			
 			int idP = Integer.parseInt(idProjekcije);

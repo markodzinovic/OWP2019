@@ -61,9 +61,19 @@ $(document).ready(function() {
 			}
 
 			if(projekcija.obrisan == true){
-				kupiKartu.hide();
-				adminBrisanje.hide();
-				return;
+				
+				if(data.uloga == 'ADMIN'){
+					console.log(data.sveKarteZaProjekciju);
+					var karte = data.sveKarteZaProjekciju;
+					
+					kupiKartu.hide();
+					adminBrisanje.hide();
+					$('#naslov').show();
+					tabelaKartiZaProjekciju.show();
+					admin();
+					karteZaProjek(tabelaKartiZaProjekciju,karte);
+					return;
+				}
 			}
 			
 			kupiKartu.on('click', function() {

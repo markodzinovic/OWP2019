@@ -41,7 +41,11 @@ public class KorisniciServlet extends HttpServlet {
 		
 		
 		try {
-			Korisnik uloga = KorisnikDAO.getKorisnik(ulogovan);
+			Korisnik uloga =KorisnikDAO.getKorisnik(ulogovan);
+			if(uloga.isObrisan() == true) {
+				request.getRequestDispatcher("./LogoutServlet").forward(request, response);
+				return;
+			}
 			
 			List<Korisnik> sviKorisnici = KorisnikDAO.getAll();
 			

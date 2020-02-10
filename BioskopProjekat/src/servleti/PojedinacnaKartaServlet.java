@@ -44,7 +44,11 @@ public class PojedinacnaKartaServlet extends HttpServlet {
 		}
 		
 		try {			
-			Korisnik uloga = KorisnikDAO.getKorisnik(ulogovan);
+			Korisnik uloga =KorisnikDAO.getKorisnik(ulogovan);
+			if(uloga.isObrisan() == true) {
+				request.getRequestDispatcher("./LogoutServlet").forward(request, response);
+				return;
+			}
 
 			String idKarte = request.getParameter("idKarte");
 			int id = Integer.parseInt(idKarte);

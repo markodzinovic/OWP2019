@@ -37,7 +37,11 @@ public class ProfilServlet extends HttpServlet {
 			return;
 		}
 		try {
-			Korisnik profil = KorisnikDAO.getKorisnik(ulogovan);
+			Korisnik profil =KorisnikDAO.getKorisnik(ulogovan);
+			if(profil.isObrisan() == true) {
+				request.getRequestDispatcher("./LogoutServlet").forward(request, response);
+				return;
+			}
 			
 			Map<String, Object> data = new LinkedHashMap<>();
 			data.put("profil", profil);

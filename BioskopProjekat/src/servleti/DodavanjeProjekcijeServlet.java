@@ -47,14 +47,17 @@ public class DodavanjeProjekcijeServlet extends HttpServlet {
 			return;
 		}
 		try {
-			Korisnik k = KorisnikDAO.getKorisnik(ulogovan);
-			
-			
+			Korisnik uloga =KorisnikDAO.getKorisnik(ulogovan);
+			if(uloga.isObrisan() == true) {
+				request.getRequestDispatcher("./LogoutServlet").forward(request, response);
+				return;
+			}
+
 			List<Film> sviFilmovi = FilmDAO.getAll();
 			List<Sala> sveSale = SalaDao.getAll();
 			
 			Map<String, Object> data = new LinkedHashMap<>();
-			data.put("uloga", k.getUloga().toString());
+			data.put("uloga", uloga.getUloga().toString());
 			data.put("sviFilmovi", sviFilmovi);
 			data.put("sveSale", sveSale);
 			
@@ -124,7 +127,10 @@ public class DodavanjeProjekcijeServlet extends HttpServlet {
 				projekcija.setDatum(datumIvreme);
 				projekcija.setSala(sala);
 				projekcija.setTipProjekcije(tip);
-				Korisnik admin = KorisnikDAO.getKorisnik("a");
+				
+				String ulogovan = (String) request.getSession().getAttribute("ulogovan");
+				Korisnik admin = KorisnikDAO.getKorisnik(ulogovan);
+				
 				projekcija.setAdministrator(admin);
 				projekcija.setCena(cena);
 				
